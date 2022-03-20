@@ -27,6 +27,7 @@ public enum ClientToServerId : ushort
     impostorSendKillNotif,
     interative,
     playerInMeeting,
+    meetingChoice,
     input,
 }
 

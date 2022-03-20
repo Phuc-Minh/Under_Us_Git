@@ -390,7 +390,15 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1123699484}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1123699484}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
@@ -398,7 +406,15 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Voted
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: Voted
       objectReference: {fileID: 0}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
@@ -406,7 +422,15 @@ PrefabInstance:
       value: Meeting, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Meeting, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -669,6 +693,34 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ec87fd80db520834aa9add79ef3e3053, type: 3}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1123699484}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Voted
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Meeting, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 824049707e70d10499b098356d848cd2, type: 3}
 --- !u!43 &439062592
@@ -1606,7 +1658,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &958744521
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1859,7 +1911,15 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1123699484}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1123699484}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
@@ -1867,7 +1927,15 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Voted
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
       value: Voted
       objectReference: {fileID: 0}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
@@ -1875,7 +1943,15 @@ PrefabInstance:
       value: Meeting, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: Meeting, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1901,7 +1977,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1123699483
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2698,6 +2774,34 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ec87fd80db520834aa9add79ef3e3053, type: 3}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1123699484}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Voted
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Meeting, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 824049707e70d10499b098356d848cd2, type: 3}
 --- !u!1 &1481721837
@@ -2715,7 +2819,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1481721838
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2753,7 +2857,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1492240575
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3101,6 +3205,34 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ec87fd80db520834aa9add79ef3e3053, type: 3}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1123699484}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Voted
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Meeting, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 824049707e70d10499b098356d848cd2, type: 3}
 --- !u!1001 &1761460016
@@ -3206,6 +3338,34 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ec87fd80db520834aa9add79ef3e3053, type: 3}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1123699484}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Voted
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Meeting, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 824049707e70d10499b098356d848cd2, type: 3}
 --- !u!1 &1767708442
@@ -3523,6 +3683,34 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ec87fd80db520834aa9add79ef3e3053, type: 3}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1123699484}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Voted
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Meeting, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 824049707e70d10499b098356d848cd2, type: 3}
 --- !u!1 &1803667096
@@ -3707,6 +3895,34 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: ec87fd80db520834aa9add79ef3e3053, type: 3}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1123699484}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Voted
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Meeting, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372669, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 824049707e70d10499b098356d848cd2, type: 3}
 --- !u!1 &1827625411
@@ -3791,7 +4007,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1827625414}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1123699484}
+        m_TargetAssemblyTypeName: Meeting, Assembly-CSharp
+        m_MethodName: Voted
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1827625414
 MonoBehaviour:
   m_ObjectHideFlags: 0

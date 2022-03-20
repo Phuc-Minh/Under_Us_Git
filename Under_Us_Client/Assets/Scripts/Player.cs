@@ -228,6 +228,15 @@ public class Player : MonoBehaviour
         connectUI.transform.GetChild(5).GetChild(0).GetComponent<Coldown>().ResetCooldown();
         connectUI.transform.GetChild(5).GetChild(0).GetComponent<Coldown>().StartTimer();
 
+        //Reset Meeting
+        Transform MeetingScreen = connectUI.transform.GetChild(4);
+        for (int i = 0; i <= 7; i++) {
+            MeetingScreen.GetChild(i).GetChild(1).gameObject.SetActive(false);
+        }
+        MeetingScreen.GetChild(8).gameObject.SetActive(true);
+        MeetingScreen.GetComponent<Meeting>().ResetMeeting();
+
+
         foreach (Player player in Player.list.Values)
         {
             if(player.Id == message.GetUShort())

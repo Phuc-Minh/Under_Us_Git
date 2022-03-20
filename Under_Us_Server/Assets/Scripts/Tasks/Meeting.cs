@@ -77,5 +77,21 @@ public class Meeting : MonoBehaviour
 
         NetworkManager.Singleton.Server.Send(message, toClientId);
     }
+
+    [MessageHandler((ushort)ClientToServerId.meetingChoice)]
+    private static void PlayerVote(ushort fromClientId, Message message)
+    {
+        int vote = message.GetInt();
+        if (Player.list.TryGetValue(fromClientId, out Player player))
+        {
+            Debug.Log("Vote : " + vote);
+            Debug.Log("Player : " + player.Id);
+        }
+        else
+        {
+            Debug.Log("2 : Vote : " + vote);
+        }
+
+    }
     #endregion
 }
