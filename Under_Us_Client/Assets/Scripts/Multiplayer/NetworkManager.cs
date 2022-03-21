@@ -16,6 +16,7 @@ public enum ServerToClientId : ushort
     playerMovement,
     playerInteract,
     playerTeleport,
+    meetingChoice,
     meetingEnd,
 }
 

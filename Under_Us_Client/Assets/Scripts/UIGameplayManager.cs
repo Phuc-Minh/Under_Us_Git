@@ -15,6 +15,19 @@ public class UIGameplayManager : MonoBehaviour
     }
 
     #region Message
+    [MessageHandler((ushort)ServerToClientId.meetingChoice)]
+    private static void playerVoted(Message message)
+    {
+        ushort idPlayer = message.GetUShort();
+        
+        Transform MeetingScreen = connectUI.transform.GetChild(4);
+        for (int i = 0; i <= 7; i++)
+        {
+            if (MeetingScreen.GetChild(i).name.Substring(13) == idPlayer.ToString())
+                MeetingScreen.GetChild(i).GetChild(1).gameObject.SetActive(true);
+        }
+    }
+
     [MessageHandler((ushort)ServerToClientId.meetingEnd)]
     private static void DeadNotification(Message message)
     {

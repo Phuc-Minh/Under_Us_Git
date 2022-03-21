@@ -143,6 +143,7 @@ public class UIGameMaster : MonoBehaviour
         PlayerMovement.enterMetting = false;
 
         Meeting.startColddown = true;
+        Meeting.resetPlayerVote();
     }
 
     #endregion

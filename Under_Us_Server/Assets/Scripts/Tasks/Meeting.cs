@@ -8,6 +8,7 @@ public class Meeting : MonoBehaviour
     public static bool startColddown;
     private static float MeetingDuration = 10;
     bool meetingInProgress;
+    public static Dictionary<ushort, int> playerVote = new Dictionary<ushort, int>();
 
     public static float GetMeetingDuration()
     {
@@ -27,6 +28,7 @@ public class Meeting : MonoBehaviour
     {
         meetingInProgress = true;
 
+        // Meeting Duration
         yield return new WaitForSeconds(MeetingDuration);
 
         if(Player.list.Count > 0)
@@ -37,7 +39,13 @@ public class Meeting : MonoBehaviour
             }
         }
         
+        // Display vote result
 
+
+        // Display eject animation
+
+
+        // Meeting end notification
         Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.meetingEnd);
         NetworkManager.Singleton.Server.SendToAll(message);
 
@@ -58,6 +66,17 @@ public class Meeting : MonoBehaviour
         if (collider.gameObject.layer == 6 || collider.gameObject.layer == 7)
         {
             PlayerLeaveMeeting(collider.transform.GetComponent<Player>().Id);
+        }
+    }
+
+    public static void resetPlayerVote()
+    {
+        playerVote.Clear();
+
+        playerVote.Add(0, 0);
+        foreach (Player player in Player.list.Values)
+        {
+            playerVote.Add(player.Id, 0);
         }
     }
 
@@ -84,12 +103,19 @@ public class Meeting : MonoBehaviour
         int vote = message.GetInt();
         if (Player.list.TryGetValue(fromClientId, out Player player))
         {
-            Debug.Log("Vote : " + vote);
-            Debug.Log("Player : " + player.Id);
+            if (playerVote.ContainsKey((ushort) vote))
+                playerVote[(ushort)vote]++;
+            else
+                playerVote.Add((ushort)vote, 1);
+
+            Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.meetingChoice);
+            messageToSend.AddUShort(fromClientId);
+
+            NetworkManager.Singleton.Server.SendToAll(messageToSend);
         }
         else
         {
-            Debug.Log("2 : Vote : " + vote);
+            Debug.Log("Anonymous vote : " + vote);
         }
 
     }
