@@ -9,6 +9,7 @@ public class Meeting : MonoBehaviour
     private static float MeetingDuration = 10;
     bool meetingInProgress;
     public static Dictionary<ushort, int> playerVote = new Dictionary<ushort, int>();
+    public static List<ushort> playerVoted = new List<ushort>();
 
     public static float GetMeetingDuration()
     {
@@ -38,9 +39,10 @@ public class Meeting : MonoBehaviour
                 player.GetComponent<PlayerMovement>().ResetMoveSpeed();
             }
         }
-        
-        // Display vote result
 
+        // Display vote result
+        MeetingResult();
+        yield return new WaitForSeconds(3);
 
         // Display eject animation
 
@@ -72,6 +74,7 @@ public class Meeting : MonoBehaviour
     public static void resetPlayerVote()
     {
         playerVote.Clear();
+        playerVoted.Clear();
 
         playerVote.Add(0, 0);
         foreach (Player player in Player.list.Values)
@@ -97,6 +100,28 @@ public class Meeting : MonoBehaviour
         NetworkManager.Singleton.Server.Send(message, toClientId);
     }
 
+    private void MeetingResult()
+    {
+        // Auto vote if player did not pick their choice
+        foreach (Player player in Player.list.Values)
+        {
+            if (!playerVoted.Contains(player.Id))
+                playerVote[0]++;
+        }
+
+        // Send meeting result to player
+        Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.meetingResult);
+        message.AddInt(playerVote.Count);
+
+        foreach (ushort playerId in playerVote.Keys)
+        {
+            message.AddUShort(playerId);
+            message.AddInt(playerVote[playerId]);
+        }
+
+        NetworkManager.Singleton.Server.SendToAll(message);
+    }
+
     [MessageHandler((ushort)ClientToServerId.meetingChoice)]
     private static void PlayerVote(ushort fromClientId, Message message)
     {
@@ -108,6 +133,10 @@ public class Meeting : MonoBehaviour
             else
                 playerVote.Add((ushort)vote, 1);
 
+            // And to voted pool
+            playerVoted.Add(fromClientId);
+
+            // Send pick to all player to display "I voted" image
             Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.meetingChoice);
             messageToSend.AddUShort(fromClientId);
 

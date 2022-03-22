@@ -28,8 +28,18 @@ public class UIGameplayManager : MonoBehaviour
         }
     }
 
+    [MessageHandler((ushort)ServerToClientId.meetingResult)]
+    private static void meetingResult(Message message)
+    {
+        int nbPlayer = message.GetInt();
+        for (int i = 0; i < nbPlayer; i++)
+        {
+            Debug.Log("Player " + message.GetUShort() + " received " + message.GetInt());
+        }
+    }
+
     [MessageHandler((ushort)ServerToClientId.meetingEnd)]
-    private static void DeadNotification(Message message)
+    private static void meetingEnd(Message message)
     {
         //Player not in meeting
         PlayerController.inMeeting = false;
