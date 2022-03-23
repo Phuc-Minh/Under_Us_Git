@@ -231,6 +231,7 @@ public class Player : MonoBehaviour
         //Reset Meeting
         Transform MeetingScreen = connectUI.transform.GetChild(4);
         for (int i = 0; i <= 7; i++) {
+            MeetingScreen.GetChild(i).GetChild(0).GetChild(0).gameObject.SetActive(false);
             MeetingScreen.GetChild(i).GetChild(1).gameObject.SetActive(false);
         }
         MeetingScreen.GetChild(8).gameObject.SetActive(true);

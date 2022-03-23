@@ -8,6 +8,7 @@ public class UIGameplayManager : MonoBehaviour
 {
     //Parametre général 
     [SerializeField] private static GameObject connectUI;
+    [SerializeField] GameObject deathPlayerAnimation;
 
     private void Start()
     {
@@ -31,11 +32,42 @@ public class UIGameplayManager : MonoBehaviour
     [MessageHandler((ushort)ServerToClientId.meetingResult)]
     private static void meetingResult(Message message)
     {
+        Transform MeetingScreen = connectUI.transform.GetChild(4);
+
         int nbPlayer = message.GetInt();
+        ushort maxPlayer = message.GetUShort();
+        int maxCount = message.GetInt();
+        ushort idPlayer;
+        int voteCount;
+
+
         for (int i = 0; i < nbPlayer; i++)
         {
-            Debug.Log("Player " + message.GetUShort() + " received " + message.GetInt());
+            idPlayer = message.GetUShort();
+            voteCount = message.GetInt();
+
+            for (int j = 0; j <= 7; j++)
+            {
+                MeetingScreen.GetChild(j).GetChild(1).gameObject.SetActive(false);
+                if (MeetingScreen.GetChild(j).name.Substring(13) == idPlayer.ToString())
+                {
+                    MeetingScreen.GetChild(j).GetChild(0).GetChild(0).GetComponent<Text>().text = voteCount.ToString();
+                    MeetingScreen.GetChild(j).GetChild(0).GetChild(0).gameObject.SetActive(true);
+                    break;
+                }
+            }
         }
+
+        MeetingScreen.gameObject.SetActive(true);
+
+        if (maxPlayer != 9999 && maxPlayer != 0)
+        {
+            GameObject deathAnimation = GameObject.Find("DeathAnimation");
+            deathAnimation.transform.GetChild(0).gameObject.SetActive(true);
+            deathAnimation.transform.GetChild(1).gameObject.SetActive(true);
+            deathAnimation.transform.GetChild(0).GetComponent<Animation>().Play();
+        }
+
     }
 
     [MessageHandler((ushort)ServerToClientId.meetingEnd)]
