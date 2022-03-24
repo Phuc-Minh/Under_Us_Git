@@ -36,6 +36,11 @@ public class Player : MonoBehaviour
         list.Remove(Id);
     }
 
+    public string GetName()
+    {
+        return username;
+    }
+
     private void Move(Vector3 newPosition, Vector3 forward)
     {
         transform.position = newPosition;
@@ -158,7 +163,7 @@ public class Player : MonoBehaviour
                     annoucementText.transform.GetChild(2).GetComponent<Text>().text = "You are a comrade";
 
                 annoucementText.transform.GetChild(2).gameObject.SetActive(true);
-                annoucementText.transform.GetChild(2).GetComponent<Animation>().Play();
+                annoucementText.transform.GetChild(2).GetComponent<Animation>().Play("AppearRightNow");
             }
         }
     }
@@ -221,7 +226,7 @@ public class Player : MonoBehaviour
         GameObject connectUI = GameObject.Find("GameplayScreen");
         connectUI.transform.GetChild(2).GetComponent<Text>().text = "Meeting started";
         connectUI.transform.GetChild(2).gameObject.SetActive(true);
-        connectUI.transform.GetChild(2).GetComponent<Animation>().Play();
+        connectUI.transform.GetChild(2).GetComponent<Animation>().Play("AppearRightNow");
 
         //Play meeting timer
         connectUI.transform.GetChild(5).gameObject.SetActive(true);
@@ -231,6 +236,7 @@ public class Player : MonoBehaviour
         //Reset Meeting
         Transform MeetingScreen = connectUI.transform.GetChild(4);
         for (int i = 0; i <= 7; i++) {
+            //Remove I voted and vote count
             MeetingScreen.GetChild(i).GetChild(0).GetChild(0).gameObject.SetActive(false);
             MeetingScreen.GetChild(i).GetChild(1).gameObject.SetActive(false);
         }

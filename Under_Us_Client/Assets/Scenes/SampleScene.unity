@@ -385,6 +385,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5120493342382372659, guid: 824049707e70d10499b098356d848cd2, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5120493342382372668, guid: 824049707e70d10499b098356d848cd2, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -745,7 +749,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh52724
+  m_Name: pb_Mesh-1292
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -973,9 +977,9 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: Role Annoucement
+  m_Text: Annoucement
 --- !u!222 &446996800
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -996,6 +1000,7 @@ Animation:
   m_Animation: {fileID: 7400000, guid: 532f67cbecfc00940aa53e8ce1ac8684, type: 2}
   m_Animations:
   - {fileID: 7400000, guid: 532f67cbecfc00940aa53e8ce1ac8684, type: 2}
+  - {fileID: 7400000, guid: efc2366ce5a790149a9130438dab125d, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
@@ -1577,7 +1582,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 457bc0dd5c044784f990c13591dc634a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathPlayerAnimation: {fileID: 0}
 --- !u!1 &797126187
 GameObject:
   m_ObjectHideFlags: 0
@@ -2102,9 +2106,17 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 439062592}
+    - target: {fileID: 5361104007155394303, guid: f5ea83afbab0d8c42843febdf91e5cd7, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 342.50665
+      objectReference: {fileID: 0}
     - target: {fileID: 5389215444617552380, guid: f5ea83afbab0d8c42843febdf91e5cd7, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5859514961150635005, guid: f5ea83afbab0d8c42843febdf91e5cd7, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7261156148849071120, guid: f5ea83afbab0d8c42843febdf91e5cd7, type: 3}
       propertyPath: m_Animations.Array.size

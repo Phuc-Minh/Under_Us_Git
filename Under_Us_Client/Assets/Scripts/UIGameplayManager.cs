@@ -8,7 +8,6 @@ public class UIGameplayManager : MonoBehaviour
 {
     //Parametre général 
     [SerializeField] private static GameObject connectUI;
-    [SerializeField] GameObject deathPlayerAnimation;
 
     private void Start()
     {
@@ -33,13 +32,11 @@ public class UIGameplayManager : MonoBehaviour
     private static void meetingResult(Message message)
     {
         Transform MeetingScreen = connectUI.transform.GetChild(4);
+        MeetingScreen.gameObject.SetActive(true);
 
         int nbPlayer = message.GetInt();
-        ushort maxPlayer = message.GetUShort();
-        int maxCount = message.GetInt();
         ushort idPlayer;
         int voteCount;
-
 
         for (int i = 0; i < nbPlayer; i++)
         {
@@ -57,17 +54,59 @@ public class UIGameplayManager : MonoBehaviour
                 }
             }
         }
+    }
 
-        MeetingScreen.gameObject.SetActive(true);
+    [MessageHandler((ushort)ServerToClientId.ejectResult)]
+    private static void ejectResult(Message message)
+    {
+        Transform MeetingScreen = connectUI.transform.GetChild(4);
+        GameObject deathAnimation = GameObject.Find("DeathAnimation");
+
+        ushort maxPlayer = message.GetUShort();
+        string playerName = "";
+
+        MeetingScreen.gameObject.SetActive(false);
+        deathAnimation.transform.GetChild(1).gameObject.SetActive(true);
 
         if (maxPlayer != 9999 && maxPlayer != 0)
         {
-            GameObject deathAnimation = GameObject.Find("DeathAnimation");
+            bool isImpostor = message.GetBool();
+
+            foreach (Player player in Player.list.Values)
+            {
+                if (player.Id == maxPlayer)
+                {
+                    playerName = player.GetName();
+                    ChangePlayerColor(player.oldColor, deathAnimation.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Renderer>().materials);
+                    break;
+                }
+            }
+
+            if(isImpostor)
+                connectUI.transform.GetChild(2).GetComponent<Text>().text = playerName + " was an impostor";
+            else
+                connectUI.transform.GetChild(2).GetComponent<Text>().text = playerName + " was not an impostor";
+
             deathAnimation.transform.GetChild(0).gameObject.SetActive(true);
-            deathAnimation.transform.GetChild(1).gameObject.SetActive(true);
-            deathAnimation.transform.GetChild(0).GetComponent<Animation>().Play();
+
+            deathAnimation.transform.GetChild(0).gameObject.GetComponent<Animation>().Play("ThrowPlayer");
+        }
+        else
+        {
+            connectUI.transform.GetChild(2).GetComponent<Text>().text = "No one is ejected";
         }
 
+        connectUI.transform.GetChild(2).gameObject.SetActive(true);
+        connectUI.transform.GetChild(2).GetComponent<Animation>().Play("Wait4SecThenAppear");
+    }
+
+    public static void ChangePlayerColor(int colorCode, Material[] playerMaterials)
+    {
+        Texture[] textureArray = Resources.LoadAll<Texture>("AstronautColor");
+        Texture[] textureBackpackArray = Resources.LoadAll<Texture>("AstronautBackpackColor");
+
+        playerMaterials[1].SetTexture("_MainTex", textureArray[colorCode]);
+        playerMaterials[2].SetTexture("_MainTex", textureBackpackArray[colorCode]);
     }
 
     [MessageHandler((ushort)ServerToClientId.meetingEnd)]
@@ -75,6 +114,12 @@ public class UIGameplayManager : MonoBehaviour
     {
         //Player not in meeting
         PlayerController.inMeeting = false;
+
+        //Reset camera and death animation
+        GameObject deathAnimation = GameObject.Find("DeathAnimation");
+        deathAnimation.transform.GetChild(0).gameObject.SetActive(false);
+        deathAnimation.transform.GetChild(1).gameObject.SetActive(false);
+        connectUI.transform.GetChild(2).gameObject.SetActive(false);
 
         //Hide meeting screen
         connectUI.transform.GetChild(4).gameObject.SetActive(false);
@@ -87,8 +132,7 @@ public class UIGameplayManager : MonoBehaviour
         //Display meeting end notification
         connectUI.transform.GetChild(2).GetComponent<Text>().text = "Meeting ended";
         connectUI.transform.GetChild(2).gameObject.SetActive(true);
-
-        connectUI.transform.GetChild(2).GetComponent<Animation>().Play();
+        connectUI.transform.GetChild(2).GetComponent<Animation>().Play("AppearRightNow");
     }
     #endregion
 }

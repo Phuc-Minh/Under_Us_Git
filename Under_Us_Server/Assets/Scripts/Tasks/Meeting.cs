@@ -43,11 +43,13 @@ public class Meeting : MonoBehaviour
 
         // Display vote result
         MeetingResult();
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(4);
 
         // Display eject animation
+        EjectAnimation();
+        yield return new WaitForSeconds(9);
 
-
+        // Display eject result
         // Meeting end notification
         Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.meetingEnd);
         NetworkManager.Singleton.Server.SendToAll(message);
@@ -104,10 +106,6 @@ public class Meeting : MonoBehaviour
 
     private void MeetingResult()
     {
-        ushort maxId = 0;
-        int maxCount = 0;
-        bool duplicateMaxCount = false;
-
         Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.meetingResult);
         message.AddInt(playerVote.Count);
 
@@ -118,6 +116,25 @@ public class Meeting : MonoBehaviour
                 playerVote[0]++;
         }
 
+        // Add all vote to message
+        foreach (ushort playerId in playerVote.Keys)
+        {
+            message.AddUShort(playerId);
+            message.AddInt(playerVote[playerId]);
+        }
+
+        // Send meeting result to player
+        NetworkManager.Singleton.Server.SendToAll(message);
+    }
+
+    private void EjectAnimation()
+    {
+        ushort maxId = 0;
+        int maxCount = 0;
+        bool duplicateMaxCount = false;
+
+        Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.ejectResult);
+
         // Get the most voted player
         foreach (ushort playerId in playerVote.Keys)
         {
@@ -126,24 +143,22 @@ public class Meeting : MonoBehaviour
                 maxId = playerId;
                 maxCount = playerVote[playerId];
                 duplicateMaxCount = false;
-            } 
+            }
             else if (playerVote[playerId] == maxCount)
                 duplicateMaxCount = true;
         }
 
         // Add the most voted player 
         // 9999 if there are two player with the same vote
-        if(duplicateMaxCount)
+        if (duplicateMaxCount)
             message.AddUShort(9999);
         else
-            message.AddUShort(maxId);
-        message.AddInt(playerVote[maxId]);
-        
-        // Add all vote to message
-        foreach (ushort playerId in playerVote.Keys)
         {
-            message.AddUShort(playerId);
-            message.AddInt(playerVote[playerId]);
+            message.AddUShort(maxId);
+            if(Player.list[maxId].Role == 2)
+                message.AddBool(true);
+            else
+                message.AddBool(false);
         }
 
         // Send meeting result to player
