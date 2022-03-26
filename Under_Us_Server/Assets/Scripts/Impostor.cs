@@ -53,7 +53,7 @@ public class Impostor : MonoBehaviour
         }
     }
 
-    private static void SetLayerRecursively(GameObject gameObject, int newLayer)
+    public static void SetLayerRecursively(GameObject gameObject, int newLayer)
     {
         gameObject.layer = newLayer;
 

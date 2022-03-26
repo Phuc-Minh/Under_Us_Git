@@ -133,6 +133,7 @@ public class UIGameplayManager : MonoBehaviour
         connectUI.transform.GetChild(2).GetComponent<Text>().text = "Meeting ended";
         connectUI.transform.GetChild(2).gameObject.SetActive(true);
         connectUI.transform.GetChild(2).GetComponent<Animation>().Play("AppearRightNow");
+        connectUI.transform.GetChild(2).GetComponent<Animation>().wrapMode = WrapMode.Once;
     }
     #endregion
 }

@@ -32,15 +32,7 @@ public class Meeting : MonoBehaviour
 
         // Meeting Duration
         yield return new WaitForSeconds(MeetingDuration);
-
-        if(Player.list.Count > 0)
-        {
-            foreach (Player player in Player.list.Values)
-            {
-                player.GetComponent<PlayerMovement>().ResetMoveSpeed();
-            }
-        }
-
+        
         // Display vote result
         MeetingResult();
         yield return new WaitForSeconds(4);
@@ -48,6 +40,15 @@ public class Meeting : MonoBehaviour
         // Display eject animation
         EjectAnimation();
         yield return new WaitForSeconds(9);
+
+        // Reset player speed
+        if (Player.list.Count > 0)
+        {
+            foreach (Player player in Player.list.Values)
+            {
+                player.GetComponent<PlayerMovement>().ResetMoveSpeed();
+            }
+        }
 
         // Display eject result
         // Meeting end notification
@@ -155,10 +156,25 @@ public class Meeting : MonoBehaviour
         else
         {
             message.AddUShort(maxId);
+
+            // Send result if player rejected is an impostor
             if(Player.list[maxId].Role == 2)
                 message.AddBool(true);
             else
                 message.AddBool(false);
+
+            // Send message notice rejected player is dead 
+            Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerDead);
+            messageToSend.AddUShort(maxId);
+
+            //Change the dead player role to Ghost
+            Player.list[maxId].Role = 3;
+
+            //Add impostor layer to all of it's children
+            Impostor.SetLayerRecursively(Player.list[maxId].gameObject, 8);
+
+            //Notice all player that someone is dead
+            NetworkManager.Singleton.Server.SendToAll(messageToSend);
         }
 
         // Send meeting result to player
