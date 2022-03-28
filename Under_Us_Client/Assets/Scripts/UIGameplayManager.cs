@@ -32,6 +32,7 @@ public class UIGameplayManager : MonoBehaviour
     private static void meetingResult(Message message)
     {
         Transform MeetingScreen = connectUI.transform.GetChild(4);
+        connectUI.transform.GetChild(0).gameObject.SetActive(false);
         MeetingScreen.gameObject.SetActive(true);
 
         int nbPlayer = message.GetInt();

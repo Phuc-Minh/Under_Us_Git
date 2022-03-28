@@ -67,6 +67,9 @@ public class GameLogic : MonoBehaviour
             {
                 player.transform.GetChild(2).gameObject.SetActive(true);
 
+                //Change his role
+                Player.list[player.Id].Role = 3;
+
                 //Add Ghost layer to all of it's children
                 SetLayerRecursively(Player.list[player.Id].gameObject, 9);
             }

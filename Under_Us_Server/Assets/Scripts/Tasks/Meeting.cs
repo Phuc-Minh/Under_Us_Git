@@ -30,8 +30,13 @@ public class Meeting : MonoBehaviour
     {
         meetingInProgress = true;
 
+        yield return new WaitForSeconds(0.25f);
+        Message messageEButton = Message.Create(MessageSendMode.unreliable, ServerToClientId.playerInteract);
+        messageEButton.AddBool(true);
+        NetworkManager.Singleton.Server.SendToAll(messageEButton);
+
         // Meeting Duration
-        yield return new WaitForSeconds(MeetingDuration);
+        yield return new WaitForSeconds(MeetingDuration-0.25f);
         
         // Display vote result
         MeetingResult();
@@ -158,23 +163,26 @@ public class Meeting : MonoBehaviour
             message.AddUShort(maxId);
 
             // Send result if player rejected is an impostor
-            if(Player.list[maxId].Role == 2)
-                message.AddBool(true);
-            else
-                message.AddBool(false);
+            if(maxId != 0)
+            {
+                if (Player.list[maxId].Role == 2)
+                    message.AddBool(true);
+                else
+                    message.AddBool(false);
 
-            // Send message notice rejected player is dead 
-            Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerDead);
-            messageToSend.AddUShort(maxId);
+                // Send message notice rejected player is dead 
+                Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerDead);
+                messageToSend.AddUShort(maxId);
 
-            //Change the dead player role to Ghost
-            Player.list[maxId].Role = 3;
+                //Change the dead player role to Ghost
+                Player.list[maxId].Role = 3;
 
-            //Add impostor layer to all of it's children
-            Impostor.SetLayerRecursively(Player.list[maxId].gameObject, 8);
+                //Add impostor layer to all of it's children
+                Impostor.SetLayerRecursively(Player.list[maxId].gameObject, 8);
 
-            //Notice all player that someone is dead
-            NetworkManager.Singleton.Server.SendToAll(messageToSend);
+                //Notice all player that someone is dead
+                NetworkManager.Singleton.Server.SendToAll(messageToSend);
+            }
         }
 
         // Send meeting result to player
