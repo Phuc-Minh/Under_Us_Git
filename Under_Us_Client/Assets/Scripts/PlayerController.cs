@@ -93,7 +93,7 @@ public class PlayerController : MonoBehaviour
             // If player is not in a meeting
             // Send E keycode to server
             if (Input.GetKeyDown(KeyCode.E) && connectUI.transform.GetChild(0).gameObject.activeSelf)
-                SendInteractive(0);
+                SendInteractive();
 
         } else if(Input.GetKeyDown(KeyCode.E)) {
             // If player is in a meeting 
@@ -133,10 +133,10 @@ public class PlayerController : MonoBehaviour
         message.AddVector3(camTransform.forward);
         NetworkManager.Singleton.Client.Send(message);
     }
-    private void SendInteractive(int idInteractive)
+    private void SendInteractive()
     {
         Message message = Message.Create(MessageSendMode.reliable, ClientToServerId.interative);
-        message.AddInt(idInteractive);
+        //message.AddInt(idInteractive);
         NetworkManager.Singleton.Client.Send(message);
     }
 
@@ -171,11 +171,15 @@ public class PlayerController : MonoBehaviour
         connectUI.transform.GetChild(3).gameObject.SetActive(UIState);
     }
 
-    [MessageHandler((ushort)ServerToClientId.playerInteract)]
+    [MessageHandler((ushort)ServerToClientId.togglePlayerInteract)]
     private static void ToggleInteractButton(Message message)
     {
         bool UIState = message.GetBool();
         connectUI.transform.GetChild(0).gameObject.SetActive(UIState);
+
+        if (!UIState)
+            Task.idTask = 0;
     }
+
     #endregion
 }

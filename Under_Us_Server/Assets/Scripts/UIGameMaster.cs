@@ -96,15 +96,14 @@ public class UIGameMaster : MonoBehaviour
     [MessageHandler((ushort)ClientToServerId.interative)]
     private static void PlayerInteractive(ushort fromClientId, Message message)
     {
-        int idInteractive = message.GetInt();
-
         Collider[] Colliders = Physics.OverlapSphere(Player.list[fromClientId].transform.position, 2f);
         foreach (Collider Collider in Colliders)
         {
+            // Check if collider is an interable object
             if (Collider.gameObject.layer == 11)
             {
-                //Meeting Call
-                if (idInteractive == 0 && Collider.gameObject.name == "MeetingButton")
+                // Meeting Call
+                if (Collider.gameObject.name == "MeetingButton")
                 {
                     GameObject meetingTable = GameObject.Find("MeetingSeat");
                     if (meetingTable != null)
@@ -127,6 +126,25 @@ public class UIGameMaster : MonoBehaviour
                         NetworkManager.Singleton.Server.SendToAll(messageToSend);
                     }
                     break;
+                }
+                else
+                {
+                    // If it is not a meeting call, check it TaskGeneral component for IdTask
+                    try
+                    {
+                        /*ushort TaskId = Collider.gameObject.GetComponent<TaskGeneral>().GetId();
+
+                        Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.interact);
+                        messageToSend.AddUShort(TaskId);
+
+                        NetworkManager.Singleton.Server.Send(messageToSend, fromClientId);*/
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.Log(e.Message);
+                        Debug.Log(Collider.gameObject.name);
+
+                    }
                 }
             }
         }

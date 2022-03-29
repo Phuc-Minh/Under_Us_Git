@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class UIGameplayManager : MonoBehaviour
 {
     //Parametre général 
-    [SerializeField] private static GameObject connectUI;
+    private static GameObject connectUI;
 
     private void Start()
     {

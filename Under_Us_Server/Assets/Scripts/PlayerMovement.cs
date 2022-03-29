@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private CharacterController controller;
     [SerializeField] private Transform camProxy;
     [SerializeField] private float gravity;
-    [SerializeField] private static float movementSpeed = 6;
+    [SerializeField] private static float movementSpeed = 7;
     [SerializeField] private float jumpHeight;
 
     private float gravityAcceleration;
@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void ResetMoveSpeed()
     {
-        movementSpeed = 6;
+        movementSpeed = 7;
         Initialize();
     }
 

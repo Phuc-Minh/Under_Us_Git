@@ -12,12 +12,14 @@ public enum ServerToClientId : ushort
     playerRole,
     playerDead,
     playerMovement,
-    playerInteract,
+    togglePlayerInteract,
+    interact,
     playerTeleport,
     meetingChoice,
     meetingResult,
     ejectResult,
-    meetingEnd
+    meetingEnd,
+    electricButton,
 }
 
 public enum ClientToServerId : ushort
@@ -29,6 +31,7 @@ public enum ClientToServerId : ushort
     interative,
     playerInMeeting,
     meetingChoice,
+    electricButton,
     input,
 }
 

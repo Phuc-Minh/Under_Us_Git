@@ -31,7 +31,7 @@ public class Meeting : MonoBehaviour
         meetingInProgress = true;
 
         yield return new WaitForSeconds(0.25f);
-        Message messageEButton = Message.Create(MessageSendMode.unreliable, ServerToClientId.playerInteract);
+        Message messageEButton = Message.Create(MessageSendMode.unreliable, ServerToClientId.togglePlayerInteract);
         messageEButton.AddBool(true);
         NetworkManager.Singleton.Server.SendToAll(messageEButton);
 
@@ -96,7 +96,7 @@ public class Meeting : MonoBehaviour
     #region Messages
     private void PlayerEnterMeeting(ushort toClientId)
     {
-        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.playerInteract);
+        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.togglePlayerInteract);
         message.AddBool(true);
 
         NetworkManager.Singleton.Server.Send(message, toClientId);
@@ -104,7 +104,7 @@ public class Meeting : MonoBehaviour
 
     private void PlayerLeaveMeeting(ushort toClientId)
     {
-        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.playerInteract);
+        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.togglePlayerInteract);
         message.AddBool(false);
 
         NetworkManager.Singleton.Server.Send(message, toClientId);
