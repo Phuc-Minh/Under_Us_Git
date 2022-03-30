@@ -22,6 +22,7 @@ public enum ServerToClientId : ushort
     ejectResult,
     meetingEnd,
     electricButton,
+    taskList,
 }
 
 public enum ClientToServerId : ushort

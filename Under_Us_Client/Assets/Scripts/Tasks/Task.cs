@@ -97,5 +97,24 @@ public class Task : MonoBehaviour
             
         }
     }
+
+    [MessageHandler((ushort)ServerToClientId.taskList)]
+    private static void TaskList(Message message)
+    {
+        int taskCount = message.GetInt();
+
+        for (int i = 0; i < taskCount; i++)
+        {
+            GameObject task = GameObject.Find(message.GetString());
+            bool statusTask = message.GetBool();
+            if (task != null)
+            {
+                if (statusTask)
+                    task.GetComponent<Light>().range = 0;
+                else
+                    task.GetComponent<Light>().range = 5;
+            }
+        }
+    }
     #endregion
 }
