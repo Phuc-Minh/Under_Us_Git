@@ -7,8 +7,8 @@ public class PlayerController : MonoBehaviour
 {
     //Parametre général 
     [SerializeField] private static GameObject connectUI;
-
     [SerializeField] private Transform camTransform;
+    
 
     private bool[] inputs;
     public static bool inMeeting;

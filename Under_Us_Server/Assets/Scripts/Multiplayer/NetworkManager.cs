@@ -21,6 +21,7 @@ public enum ServerToClientId : ushort
     meetingEnd,
     electricButton,
     taskList,
+    securityCamera,
 }
 
 public enum ClientToServerId : ushort

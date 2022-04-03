@@ -23,6 +23,7 @@ public enum ServerToClientId : ushort
     meetingEnd,
     electricButton,
     taskList,
+    securityCamera,
 }
 
 public enum ClientToServerId : ushort
@@ -60,8 +61,8 @@ public class NetworkManager : MonoBehaviour
 
     public Client Client { get; private set; }
 
-    [SerializeField] private string ip;
-    [SerializeField] private ushort port;
+    //[SerializeField] private string ip;
+    //[SerializeField] private ushort port;
 
     private void Awake()
     {
@@ -89,7 +90,7 @@ public class NetworkManager : MonoBehaviour
         Client.Disconnect();
     }
 
-    public void Connect()
+    public void Connect(string ip, ushort port)
     {
         Client.Connect($"{ip}:{port}");
     }

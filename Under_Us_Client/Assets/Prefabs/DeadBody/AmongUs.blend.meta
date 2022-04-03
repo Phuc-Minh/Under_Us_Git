@@ -3,7 +3,22 @@ guid: ed514694ec719e94c85c362c786d35bb
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Hueso
+    second: {fileID: 2100000, guid: 05a50341a56ce6d409cd2b6aa77e834d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Naranja-Traje
+    second: {fileID: 2100000, guid: 850b1b51be06c5848b67a8d7ca550767, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Sangre
+    second: {fileID: 2100000, guid: 8e1922a2a611296469ef131fe3e6f415, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

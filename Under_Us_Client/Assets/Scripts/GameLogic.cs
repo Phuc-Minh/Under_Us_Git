@@ -7,10 +7,9 @@ using UnityEngine.UI;
 
 public class GameLogic : MonoBehaviour
 {
-    [SerializeField] LayerMask ghostMask;
-
     //Attach network manager to gameObject and access that in code
     private static GameLogic _singleton;
+    
 
     public static GameLogic Singleton
     {
@@ -34,10 +33,13 @@ public class GameLogic : MonoBehaviour
     [Header("Prefabs")]
     [SerializeField] private GameObject localPlayerPrefab;
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject deadPlayerPrefab;
+    [SerializeField] Texture[] textureArray;
 
     private void Awake()
     {
         Singleton = this;
+        textureArray = Resources.LoadAll<Texture>("AstronautBackpackColor");
     }
 
     #region Message
@@ -45,16 +47,16 @@ public class GameLogic : MonoBehaviour
     private static void DeadNotification(Message message)
     {
         ushort deadPlayerId = message.GetUShort();
-        foreach (Player player in Player.list.Values)
-        { 
-            if (player.IsLocal && player.Id == deadPlayerId)
+        if (Player.list.ContainsKey(deadPlayerId))
+        {
+            if (Player.list[deadPlayerId].IsLocal)
             {
                 GameObject connectUI = GameObject.Find("GameplayScreen");
 
                 //Modify Role attribute in Player
-                Player.list[player.Id].GetComponent<Player>().Role = 2;
+                Player.list[deadPlayerId].GetComponent<Player>().Role = 2;
                 //player.gameObject.GetComponentInChildren<Camera>().cullingMask |= 9;
-                player.transform.GetChild(1).GetComponent<Camera>().cullingMask |= 1 << 9;
+                Player.list[deadPlayerId].transform.GetChild(1).GetComponent<Camera>().cullingMask |= 1 << 9;
 
                 //Display dead notification
                 connectUI.transform.GetChild(2).GetComponent<Text>().text = "You are dead!";
@@ -63,17 +65,28 @@ public class GameLogic : MonoBehaviour
                 connectUI.transform.GetChild(2).GetComponent<Animation>().Play();
                 connectUI.transform.GetChild(2).GetComponent<Animation>().wrapMode = WrapMode.Loop;
             }
-            else if(player.Id == deadPlayerId)
+            else
             {
-                player.transform.GetChild(2).gameObject.SetActive(true);
+                Player.list[deadPlayerId].transform.GetChild(2).gameObject.SetActive(true);
 
                 //Change his role
-                Player.list[player.Id].Role = 3;
+                Player.list[deadPlayerId].Role = 3;
 
                 //Add Ghost layer to all of it's children
-                SetLayerRecursively(Player.list[player.Id].gameObject, 9);
+                SetLayerRecursively(Player.list[deadPlayerId].gameObject, 9);
             }
-        }   
+
+            // Instantiate a dead corpse 
+            Singleton.deadPlayerPrefab.name = "Tombstone of player " + Player.list[deadPlayerId].Id;
+            Singleton.deadPlayerPrefab.transform.position = new Vector3(Player.list[deadPlayerId].gameObject.transform.position.x,
+                                                                        Player.list[deadPlayerId].gameObject.transform.position.y - 0.5f,
+                                                                        Player.list[deadPlayerId].gameObject.transform.position.z);
+            Singleton.deadPlayerPrefab.transform.rotation = Player.list[deadPlayerId].gameObject.transform.rotation;
+            Material[] playerMaterials = Singleton.deadPlayerPrefab.transform.GetComponent<Renderer>().sharedMaterials;
+            playerMaterials[0].SetTexture("_MainTex", Singleton.textureArray[Player.list[deadPlayerId].oldColor]);
+
+            Instantiate(Singleton.deadPlayerPrefab);
+        }
     }
 
     private static void SetLayerRecursively(GameObject gameObject, int newLayer)

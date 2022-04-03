@@ -83,7 +83,9 @@ public class Player : MonoBehaviour
     private static void ChangePlayerTexture(Material[] playerMaterials, int colorId)
     {
         playerMaterials[1].SetTexture("_MainTex", textureArray[colorId]);
+        playerMaterials[1].SetTexture("_EmissionMap", textureArray[colorId]);
         playerMaterials[2].SetTexture("_MainTex", textureBackpackArray[colorId]);
+        playerMaterials[2].SetTexture("_EmissionMap", textureBackpackArray[colorId]);
     }
 
     public void ChangePlayerColor(int colorCode, Material[] playerMaterials)

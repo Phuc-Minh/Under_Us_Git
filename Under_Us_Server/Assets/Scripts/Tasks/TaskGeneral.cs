@@ -80,6 +80,9 @@ public class TaskGeneral : MonoBehaviour
         if (collider.gameObject.layer == 6 || collider.gameObject.layer == 7)
         {
             PlayerEnterTaskZone(collider.transform.GetComponent<Player>().Id);
+        }else
+        {
+            Debug.Log(collider.gameObject.layer);
         }
     }
 
