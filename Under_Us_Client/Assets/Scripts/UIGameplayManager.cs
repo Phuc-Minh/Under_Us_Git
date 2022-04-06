@@ -14,6 +14,14 @@ public class UIGameplayManager : MonoBehaviour
         connectUI = GameObject.Find("GameplayScreen");
     }
 
+    public static void CleanScreen()
+    {
+        for (int i = 0; i < connectUI.transform.childCount; i++)
+        {
+            connectUI.transform.GetChild(i).gameObject.SetActive(false);
+        }
+    } 
+
     #region Message
     [MessageHandler((ushort)ServerToClientId.meetingChoice)]
     private static void playerVoted(Message message)

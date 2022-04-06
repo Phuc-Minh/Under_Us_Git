@@ -25,9 +25,14 @@ public class GameLogic : MonoBehaviour
     }
 
     public GameObject PlayerPrefab => playerPrefab;
+    public GameObject DeadPlayerPrefab => deadPlayerPrefab;
+
+
 
     [Header("Prefabs")]
     [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject deadPlayerPrefab;
+
 
     public static bool[] tableColor = new bool[10];
     public static List<ushort> tablePlayerId = new List<ushort>();

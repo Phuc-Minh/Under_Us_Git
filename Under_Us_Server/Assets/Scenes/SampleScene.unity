@@ -558,6 +558,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerPrefab: {fileID: 8401191290057888868, guid: 8656c3160a32598408808f7c015221c1, type: 3}
+  deadPlayerPrefab: {fileID: 731160031749116218, guid: a2da2c98b53065f44b343d38b8c5daf7, type: 3}
 --- !u!1001 &576623854
 PrefabInstance:
   m_ObjectHideFlags: 0

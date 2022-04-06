@@ -221,12 +221,19 @@ public class Player : MonoBehaviour
     [MessageHandler((ushort)ServerToClientId.playerTeleport)]
     private static void PlayerTeleport(Message message)
     {
+        UIGameplayManager.CleanScreen();
+
         PlayerController.inMeeting = true;
+        int meetingMode = message.GetInt();
         float meetingDuration = message.GetFloat();
 
         //Display meeting notification
         GameObject connectUI = GameObject.Find("GameplayScreen");
-        connectUI.transform.GetChild(2).GetComponent<Text>().text = "Meeting started";
+        if(meetingMode == 0)
+            connectUI.transform.GetChild(2).GetComponent<Text>().text = "Dead Player Reported";
+        else
+            connectUI.transform.GetChild(2).GetComponent<Text>().text = "Meeting started";
+
         connectUI.transform.GetChild(2).gameObject.SetActive(true);
         connectUI.transform.GetChild(2).GetComponent<Animation>().Play("AppearRightNow");
 

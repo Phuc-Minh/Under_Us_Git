@@ -90,7 +90,7 @@ public class Impostor : MonoBehaviour
 
         if (closestTarget != null)
         {
-            Debug.Log("Id Dead Player :" + closestTarget.gameObject.GetComponent<Player>().Id);
+            Meeting.instantiateDeadPlayer(closestTarget.gameObject.GetComponent<Player>().Id);
 
             Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerDead);
             messageToSend.AddUShort(closestTarget.gameObject.GetComponent<Player>().Id);

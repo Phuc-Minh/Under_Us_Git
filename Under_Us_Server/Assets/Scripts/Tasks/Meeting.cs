@@ -174,6 +174,9 @@ public class Meeting : MonoBehaviour
                 Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerDead);
                 messageToSend.AddUShort(maxId);
 
+                // Instantiate dead player tombstone
+                instantiateDeadPlayer(maxId);
+
                 //Change the dead player role to Ghost
                 Player.list[maxId].Role = 3;
 
@@ -187,6 +190,16 @@ public class Meeting : MonoBehaviour
 
         // Send meeting result to player
         NetworkManager.Singleton.Server.SendToAll(message);
+    }
+
+    public static void instantiateDeadPlayer(ushort deadPlayerId)
+    {
+        GameLogic.Singleton.DeadPlayerPrefab.name = "Tombstone";
+        GameLogic.Singleton.DeadPlayerPrefab.transform.position = new Vector3(Player.list[deadPlayerId].gameObject.transform.position.x,
+                                                                    Player.list[deadPlayerId].gameObject.transform.position.y - 0.5f,
+                                                                    Player.list[deadPlayerId].gameObject.transform.position.z);
+        GameLogic.Singleton.DeadPlayerPrefab.transform.rotation = Player.list[deadPlayerId].gameObject.transform.rotation;
+        Instantiate(GameLogic.Singleton.DeadPlayerPrefab);
     }
 
     [MessageHandler((ushort)ClientToServerId.meetingChoice)]

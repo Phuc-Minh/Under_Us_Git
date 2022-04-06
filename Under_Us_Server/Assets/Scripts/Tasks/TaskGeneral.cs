@@ -76,8 +76,8 @@ public class TaskGeneral : MonoBehaviour
 
     private void OnTriggerEnter(Collider collider)
     {
-        //Verify if collider is a comrade or an impostor
-        if (collider.gameObject.layer == 6 || collider.gameObject.layer == 7)
+        //Verify if collider is a comrade or an impostor or a ghost
+        if (collider.gameObject.layer == 6 || collider.gameObject.layer == 7 || collider.gameObject.layer == 8)
         {
             PlayerEnterTaskZone(collider.transform.GetComponent<Player>().Id);
         }else
@@ -88,8 +88,8 @@ public class TaskGeneral : MonoBehaviour
 
     private void OnTriggerExit(Collider collider)
     {
-        //Verify if collider is a comrade or an impostor
-        if (collider.gameObject.layer == 6 || collider.gameObject.layer == 7)
+        //Verify if collider is a comrade or an impostor or a ghost
+        if (collider.gameObject.layer == 6 || collider.gameObject.layer == 7 || collider.gameObject.layer == 8)
         {
             PlayerLeaveTaskZone(collider.transform.GetComponent<Player>().Id);
         }

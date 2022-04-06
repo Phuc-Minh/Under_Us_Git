@@ -54,7 +54,7 @@ public class GameLogic : MonoBehaviour
                 GameObject connectUI = GameObject.Find("GameplayScreen");
 
                 //Modify Role attribute in Player
-                Player.list[deadPlayerId].GetComponent<Player>().Role = 2;
+                Player.list[deadPlayerId].GetComponent<Player>().Role = 3;
                 //player.gameObject.GetComponentInChildren<Camera>().cullingMask |= 9;
                 Player.list[deadPlayerId].transform.GetChild(1).GetComponent<Camera>().cullingMask |= 1 << 9;
 
@@ -63,7 +63,7 @@ public class GameLogic : MonoBehaviour
                 connectUI.transform.GetChild(2).gameObject.SetActive(true);
 
                 connectUI.transform.GetChild(2).GetComponent<Animation>().Play();
-                connectUI.transform.GetChild(2).GetComponent<Animation>().wrapMode = WrapMode.Loop;
+                //connectUI.transform.GetChild(2).GetComponent<Animation>().wrapMode = WrapMode.Loop;
             }
             else
             {

@@ -103,7 +103,7 @@ public class UIGameMaster : MonoBehaviour
             if (Collider.gameObject.layer == 11)
             {
                 // Meeting Call
-                if (Collider.gameObject.name == "MeetingButton")
+                if (Collider.gameObject.name == "MeetingButton" || Collider.gameObject.name == "Tombstone(Clone)")
                 {
                     GameObject meetingTable = GameObject.Find("MeetingSeat");
                     if (meetingTable != null)
@@ -112,6 +112,12 @@ public class UIGameMaster : MonoBehaviour
                         PlayerMovement.enterMetting = true;
 
                         Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerTeleport);
+
+                        if (Collider.gameObject.name == "Tombstone")
+                            messageToSend.AddInt(0);
+                        else
+                            messageToSend.AddInt(1);
+
                         messageToSend.AddFloat(Meeting.GetMeetingDuration());
                         foreach (Player player in Player.list.Values)
                         {

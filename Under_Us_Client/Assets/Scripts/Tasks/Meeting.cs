@@ -19,23 +19,31 @@ public class Meeting : MonoBehaviour
 
             Message message = Message.Create(MessageSendMode.reliable, ClientToServerId.meetingChoice);
 
+            // Can not vote if player is dead
+            foreach (Player player in Player.list.Values)
+            {
+                // If the button is the same player as player
+                if (player.IsLocal && player.Role == 3)
+                {
+                    Debug.Log("Can not vote if you are dead");
+                    return;
+                }
+            }
+
             if (buttonName.Substring(0, 13) == "PlayerSection")
             {
-                foreach (Player player in Player.list.Values)
+                // Can not self vote
+                if (Player.list[ushort.Parse(buttonName.Substring(13))].IsLocal)
                 {
-                    // If the button is the same player as player
-                    if(player.IsLocal && player.Id == int.Parse(buttonName.Substring(13)))
-                    {
-                        Debug.Log("Same Player");
-                        return;
-                    }
+                    Debug.Log("Same Player");
+                    return;
+                }
 
-                    // If the button is a dead player
-                    if (player.Role == 3)
-                    {
-                        Debug.Log("Dead Player");
-                        return;
-                    }
+                // Can not vote dead player
+                if (Player.list[ushort.Parse(buttonName.Substring(13))].Role == 3)
+                {
+                    Debug.Log("Dead Player");
+                    return;
                 }
 
                 message.AddInt(int.Parse(buttonName.Substring(13)));
