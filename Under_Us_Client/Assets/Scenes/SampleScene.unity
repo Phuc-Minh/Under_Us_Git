@@ -7881,6 +7881,7 @@ MonoBehaviour:
   localPlayerPrefab: {fileID: 2638774352941246316, guid: af07f1ccf03576c48965a64d9929da7b, type: 3}
   playerPrefab: {fileID: 2638774352941246316, guid: 5f663e5b7edc8c147af56df3d0cbab8f, type: 3}
   deadPlayerPrefab: {fileID: 3769590091494448480, guid: 5e7008ae316fc6c4ea2e85e24227f472, type: 3}
+  textureArray: []
 --- !u!1 &1527764345
 GameObject:
   m_ObjectHideFlags: 0
@@ -9737,6 +9738,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3781632149711331844, guid: fcd69bf261aac614497b272417e36320, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: ac79f17b75939cd4db41d2554bd401ef, type: 2}
     - target: {fileID: 4167031079547689126, guid: fcd69bf261aac614497b272417e36320, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.02

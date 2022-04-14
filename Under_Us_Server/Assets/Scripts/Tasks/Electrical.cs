@@ -45,7 +45,7 @@ public class Electrical : TaskGeneral
     }
 
     [MessageHandler((ushort)ClientToServerId.electricButton)]
-    private static void PlayerVote(ushort fromClientId, Message message)
+    private static void SwitchElectrical(ushort fromClientId, Message message)
     {
         tableElectric[message.GetUShort()] = message.GetBool();
         needCheckTable = true;

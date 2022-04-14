@@ -22,6 +22,7 @@ public enum ServerToClientId : ushort
     electricButton,
     taskList,
     securityCamera,
+    lavaButton,
 }
 
 public enum ClientToServerId : ushort
@@ -34,6 +35,7 @@ public enum ClientToServerId : ushort
     playerInMeeting,
     meetingChoice,
     electricButton,
+    lavaButton,
     input,
 }
 

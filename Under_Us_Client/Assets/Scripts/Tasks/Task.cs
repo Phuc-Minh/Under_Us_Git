@@ -26,7 +26,7 @@ public class Task : MonoBehaviour
         // Close all task 
         if (idTask == 0)
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < 2; i++)
             {
                 TaskUI.transform.GetChild(i).gameObject.SetActive(false);
             }
@@ -58,7 +58,7 @@ public class Task : MonoBehaviour
     {
         Transform buttonSection = EventSystem.current.currentSelectedGameObject.transform.parent;
         
-        Message message = Message.Create(MessageSendMode.unreliable, ClientToServerId.electricButton);
+        Message message = Message.Create(MessageSendMode.reliable, ClientToServerId.electricButton);
         
         message.AddUShort(ushort.Parse(buttonSection.name.Substring(21)));
 
@@ -91,13 +91,54 @@ public class Task : MonoBehaviour
                 TaskUI.transform.GetChild(0).GetChild(i + 1).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteArray[2];
             }
         }
+    }
+    #endregion
 
-        foreach (bool electricButton in tableElectric)
-        {
-            
-        }
+    #region LAVAMETER
+    public void RaiseLavaMeter()
+    {
+        Message message = Message.Create(MessageSendMode.reliable, ClientToServerId.lavaButton);
+        message.AddBool(true);
+
+        NetworkManager.Singleton.Client.Send(message);
     }
 
+    public void ReduceLavaMeter()
+    {
+        Message message = Message.Create(MessageSendMode.reliable, ClientToServerId.lavaButton);
+        message.AddBool(false);
+
+        NetworkManager.Singleton.Client.Send(message);
+    }
+
+    [MessageHandler((ushort)ServerToClientId.lavaButton)]
+    private static void DisplayLavaButton(Message message)
+    {
+        spriteArray = Resources.LoadAll<Sprite>("Lava");
+        TaskUI = GameObject.Find("TaskScreen");
+
+        int lavaTemp = message.GetInt();
+        int lavaMeter = message.GetInt();
+
+        TaskUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Text>().text = lavaMeter.ToString();
+        TaskUI.transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<Text>().text = lavaTemp.ToString();
+
+        if(lavaTemp == lavaMeter)
+        {
+            TaskUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteArray[4];
+            TaskUI.transform.GetChild(1).GetChild(0).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteArray[0];
+            TaskUI.transform.GetChild(1).GetChild(0).GetChild(2).gameObject.GetComponent<Image>().sprite = spriteArray[2];
+        }
+        else
+        {
+            TaskUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteArray[5];
+            TaskUI.transform.GetChild(1).GetChild(0).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteArray[1];
+            TaskUI.transform.GetChild(1).GetChild(0).GetChild(2).gameObject.GetComponent<Image>().sprite = spriteArray[3];
+        }
+    }
+    #endregion
+
+    //Toggle Task Light in game and minimap
     [MessageHandler((ushort)ServerToClientId.taskList)]
     private static void TaskList(Message message)
     {
@@ -116,5 +157,4 @@ public class Task : MonoBehaviour
             }
         }
     }
-    #endregion
 }

@@ -11,6 +11,7 @@ public class TaskGeneral : MonoBehaviour
     public enum TaskId : ushort
     {
         Electrical = 1,
+        LavaMeter,
     }
 
     private ushort id;
@@ -107,7 +108,7 @@ public class TaskGeneral : MonoBehaviour
 
     private void PlayerLeaveTaskZone(ushort toClientId)
     {
-        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.interact);
+        Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.interact);
         message.AddBool(false);
 
         NetworkManager.Singleton.Server.Send(message, toClientId);
