@@ -28,6 +28,7 @@ public class Player : MonoBehaviour
     //Animation + Movement
     [SerializeField] private PlayerAnimationManager animationManager;
     [SerializeField] private Transform camTransform;
+    [SerializeField] private Interpolator interpolator;
 
     private string username;
 
@@ -41,13 +42,13 @@ public class Player : MonoBehaviour
         return username;
     }
 
-    private void Move(Vector3 newPosition, Vector3 forward)
+    private void Move(ushort tick, Vector3 newPosition, Vector3 forward)
     {
-        transform.position = newPosition;
+        interpolator.NewUpdate(tick, newPosition);
 
         if (!IsLocal)
         {
-            transform.rotation = Quaternion.LookRotation(new Vector3(forward.x,0,forward.z));
+            transform.rotation = Quaternion.LookRotation(new Vector3(forward.x, 0, forward.z));
             animationManager.AnimateBasedOnSpeed();
         }
     }
@@ -159,9 +160,9 @@ public class Player : MonoBehaviour
             if (annoucementText != null)
             {
 
-                if(role == 2)
+                if (role == 2)
                     annoucementText.transform.GetChild(2).GetComponent<Text>().text = "You are an impostor";
-                else if(role == 1)
+                else if (role == 1)
                     annoucementText.transform.GetChild(2).GetComponent<Text>().text = "You are a comrade";
 
                 annoucementText.transform.GetChild(2).gameObject.SetActive(true);
@@ -196,7 +197,7 @@ public class Player : MonoBehaviour
     private static void PlayerMovement(Message message)
     {
         if (list.TryGetValue(message.GetUShort(), out Player player))
-            player.Move(message.GetVector3(), message.GetVector3());
+            player.Move(message.GetUShort(), message.GetVector3(), message.GetVector3());
     }
 
     [MessageHandler((ushort)ServerToClientId.playerChangeColor)]
@@ -206,7 +207,7 @@ public class Player : MonoBehaviour
         {
             int color = message.GetInt();
             player.ChangeColor(color + 1);
-            if(!player.IsLocal)
+            if (!player.IsLocal)
                 player.oldColor = color;
         }
     }
@@ -229,7 +230,7 @@ public class Player : MonoBehaviour
 
         //Display meeting notification
         GameObject connectUI = GameObject.Find("GameplayScreen");
-        if(meetingMode == 0)
+        if (meetingMode == 0)
             connectUI.transform.GetChild(2).GetComponent<Text>().text = "Dead Player Reported";
         else
             connectUI.transform.GetChild(2).GetComponent<Text>().text = "Meeting started";
@@ -244,7 +245,8 @@ public class Player : MonoBehaviour
 
         //Reset Meeting
         Transform MeetingScreen = connectUI.transform.GetChild(4);
-        for (int i = 0; i <= 7; i++) {
+        for (int i = 0; i <= 7; i++)
+        {
             //Remove I voted and vote count
             MeetingScreen.GetChild(i).GetChild(0).GetChild(0).gameObject.SetActive(false);
             MeetingScreen.GetChild(i).GetChild(1).gameObject.SetActive(false);
@@ -255,8 +257,8 @@ public class Player : MonoBehaviour
 
         foreach (Player player in Player.list.Values)
         {
-            if(player.Id == message.GetUShort())
-            player.transform.position = message.GetVector3();
+            if (player.Id == message.GetUShort())
+                player.transform.position = message.GetVector3();
         }
 
         Message messageToSend = Message.Create(MessageSendMode.reliable, ClientToServerId.playerInMeeting);

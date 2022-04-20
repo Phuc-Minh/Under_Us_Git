@@ -32,8 +32,6 @@ public class CameraController : MonoBehaviour
             ToggleCursorMode();
         if (Cursor.lockState == CursorLockMode.Locked)
             Look();
-
-        Debug.DrawRay(transform.position, transform.forward * 2f, Color.green);
     }
 
     private void Look()

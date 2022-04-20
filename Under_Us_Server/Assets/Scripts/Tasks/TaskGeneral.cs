@@ -6,11 +6,18 @@ using UnityEngine;
 
 public class TaskGeneral : MonoBehaviour
 {
-    public static Dictionary<ushort, bool> listTask = new Dictionary<ushort, bool>();
+    public static Dictionary<ushort, bool> listStatusTask = new Dictionary<ushort, bool>();
+    public static Dictionary<ushort,TaskGeneral> listTask = new Dictionary<ushort, TaskGeneral>();
 
     public enum TaskId : ushort
     {
         Electrical = 1,
+        ElectricalMeeting,
+        ElectricalO2,
+        ElectricalSpeciment,
+        ElectricalLabo1,
+        ElectricalLabo2,
+        ElectricalLabo3,
         LavaMeter,
     }
 
@@ -31,9 +38,9 @@ public class TaskGeneral : MonoBehaviour
     }
     public void SetIsFinished(bool IsFinished)
     {
-        bool[] oldArrayTask = new bool[listTask.Count];
+        bool[] oldArrayTask = new bool[listStatusTask.Count];
         int i = 0;
-        foreach (bool item in listTask.Values)
+        foreach (bool item in listStatusTask.Values)
         {
             oldArrayTask[i] = item;
             i++;
@@ -42,12 +49,12 @@ public class TaskGeneral : MonoBehaviour
         isFinished = IsFinished;
 
         //Update to list
-        listTask[GetId()] = GetIsFinished();
+        listStatusTask[GetId()] = GetIsFinished();
 
         //Each time the list is updated check if all the task is finished
-        bool[] newArrayTask = new bool[listTask.Count];
+        bool[] newArrayTask = new bool[listStatusTask.Count];
         i = 0;
-        foreach (bool item in listTask.Values)
+        foreach (bool item in listStatusTask.Values)
         {
             newArrayTask[i] = item;
             i++;
@@ -58,12 +65,12 @@ public class TaskGeneral : MonoBehaviour
         {
             Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.taskList);
 
-            message.AddInt(listTask.Count);
+            message.AddInt(listStatusTask.Count);
 
-            foreach (TaskId key in listTask.Keys)
+            foreach (TaskId key in listStatusTask.Keys)
             {
                 message.AddString(key.ToString());
-                message.AddBool(listTask[(ushort) key]);
+                message.AddBool(listStatusTask[(ushort) key]);
             }
 
             NetworkManager.Singleton.Server.SendToAll(message);

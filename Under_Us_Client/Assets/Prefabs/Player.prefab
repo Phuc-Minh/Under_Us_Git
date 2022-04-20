@@ -62,6 +62,7 @@ GameObject:
   - component: {fileID: 1640475467724527047}
   - component: {fileID: -1501596411682550254}
   - component: {fileID: 8898964520690159967}
+  - component: {fileID: -4152048738827649575}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -98,8 +99,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f31065ee75c47f749af7fb99a5f1383e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  oldColor: 10
   animationManager: {fileID: 8898964520690159967}
   camTransform: {fileID: 4999555575762630401}
+  interpolator: {fileID: -4152048738827649575}
 --- !u!114 &8898964520690159967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -114,6 +117,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 6822352059374736749}
   playerMoveSpeed: 5
+--- !u!114 &-4152048738827649575
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2638774352941246316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4964d96854092574381f09d5b22d033b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeElapsed: 0
+  timeToReachTarget: 0.05
+  movementThreshold: 0.05
 --- !u!1 &6340715586590906688
 GameObject:
   m_ObjectHideFlags: 0

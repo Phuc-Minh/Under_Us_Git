@@ -6,13 +6,39 @@ using UnityEngine;
 
 public class Electrical : TaskGeneral
 {
-    public static bool[] tableElectric = new bool[10];
-    private static bool needCheckTable;
+    private bool[] tableElectric = new bool[10];
+    private bool needCheckTable;
 
     private void Start()
     {
-        SetId((ushort) TaskId.Electrical);
-        listTask.Add(GetId(), GetIsFinished());
+        switch (gameObject.name)
+        {
+            case "ElectricalBox":
+                SetId((ushort)TaskId.Electrical);
+                break;
+            case "ElectricalMeetingBox":
+                SetId((ushort)TaskId.ElectricalMeeting);
+                break;
+            case "ElectricalO2Box":
+                SetId((ushort)TaskId.ElectricalO2);
+                break;
+            case "ElectricalSpecimentBox":
+                SetId((ushort)TaskId.ElectricalSpeciment);
+                break;
+            case "ElectricalLabo1Box":
+                SetId((ushort)TaskId.ElectricalLabo1);
+                break;
+            case "ElectricalLabo2Box":
+                SetId((ushort)TaskId.ElectricalLabo2);
+                break;
+            case "ElectricalLabo3Box":
+                SetId((ushort)TaskId.ElectricalLabo3);
+                break;
+            default:
+                break;
+        }
+        listStatusTask.Add(GetId(), GetIsFinished());
+        listTask.Add(GetId(),this);
     }
 
     private void Update()
@@ -47,7 +73,9 @@ public class Electrical : TaskGeneral
     [MessageHandler((ushort)ClientToServerId.electricButton)]
     private static void SwitchElectrical(ushort fromClientId, Message message)
     {
-        tableElectric[message.GetUShort()] = message.GetBool();
-        needCheckTable = true;
+        ushort idTask = message.GetUShort();
+
+        listTask[idTask].gameObject.GetComponent<Electrical>().tableElectric[message.GetUShort()] = message.GetBool();
+        listTask[idTask].gameObject.GetComponent<Electrical>().needCheckTable = true;
     }
 }

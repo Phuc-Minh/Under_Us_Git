@@ -4,9 +4,10 @@ using UnityEngine;
 
 public enum ServerToClientId : ushort
 {
-    playerSpawned = 1,
-    taskZone = 2,
-    startGame = 3,
+    sync = 1,
+    playerSpawned,
+    taskZone,
+    startGame,
     playerChangeColor,
     playerInteracKillZone,
     playerRole,
@@ -61,6 +62,7 @@ public class NetworkManager : MonoBehaviour
     }
 
     public Server Server { get; private set; }
+    public ushort CurrentTick { get; private set; } = 0;
 
     [SerializeField] private ushort port;
     [SerializeField] private ushort maxClientCount;
@@ -82,10 +84,15 @@ public class NetworkManager : MonoBehaviour
         Server.Start(port, maxClientCount);
         Server.ClientDisconnected += PlayerLeft;
     }
- 
+
     private void FixedUpdate()
     {
         Server.Tick();
+
+        if (CurrentTick % 200 == 0)
+            SendSync();
+
+        CurrentTick++;
     }
 
     private void OnApplicationQuit()
@@ -102,5 +109,13 @@ public class NetworkManager : MonoBehaviour
         }
 
 
+    }
+
+    private void SendSync()
+    {
+        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.sync);
+        message.Add(CurrentTick);
+
+        Server.SendToAll(message);
     }
 }

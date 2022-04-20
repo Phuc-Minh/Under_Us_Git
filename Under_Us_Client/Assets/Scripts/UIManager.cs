@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private InputField usernameField;
     [SerializeField] private InputField iPField;
     [SerializeField] private InputField portField;
-    [SerializeField] private GameObject minimap;
+    //[SerializeField] private GameObject minimap;
     [SerializeField] private GameObject title;
 
 
@@ -48,7 +48,7 @@ public class UIManager : MonoBehaviour
 
         connectUI.SetActive(false);
         title.SetActive(false);
-        minimap.SetActive(true);
+        //minimap.SetActive(true);
 
         NetworkManager.Singleton.Connect(iPField.text,ushort.Parse(portField.text));
     }
@@ -60,7 +60,7 @@ public class UIManager : MonoBehaviour
         portField.interactable = true;
 
         connectUI.SetActive(true);
-        minimap.SetActive(false);
+        //minimap.SetActive(false);
         title.SetActive(true);
     }
 

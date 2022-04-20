@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private CharacterController controller;
     [SerializeField] private Transform camProxy;
     [SerializeField] private float gravity;
-    [SerializeField] private static float movementSpeed = 7;
+    [SerializeField] private static float movementSpeed = 8;
     [SerializeField] private float jumpHeight;
 
     private float gravityAcceleration;
@@ -72,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void ResetMoveSpeed()
     {
-        movementSpeed = 7;
+        movementSpeed = 8;
         Initialize();
     }
 
@@ -115,8 +115,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void SendMovement()
     {
+        if (NetworkManager.Singleton.CurrentTick % 2 != 0)
+            return;
+
         Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.playerMovement);
         message.AddUShort(player.Id);
+        message.AddUShort(NetworkManager.Singleton.CurrentTick);
         message.AddVector3(transform.position);
         message.AddVector3(camProxy.forward);
         NetworkManager.Singleton.Server.SendToAll(message);

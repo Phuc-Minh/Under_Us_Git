@@ -7,6 +7,18 @@ using UnityEngine.UI;
 
 public class Task : MonoBehaviour
 {
+    public enum TaskId : ushort
+    {
+        Electrical = 1,
+        ElectricalMeeting,
+        ElectricalO2,
+        ElectricalSpeciment,
+        ElectricalLabo1,
+        ElectricalLabo2,
+        ElectricalLabo3,
+        LavaMeter,
+    }
+
     private static GameObject connectUI;
     private static GameObject TaskUI;
     public static ushort idTask;
@@ -34,12 +46,17 @@ public class Task : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && idTask != 0)
         {
-            TaskUI.transform.GetChild(idTask-1).gameObject.SetActive(!TaskUI.transform.GetChild(idTask - 1).gameObject.activeSelf);
+            if(idTask < 8)
+                TaskUI.transform.GetChild(0).gameObject.SetActive(!TaskUI.transform.GetChild(0).gameObject.activeSelf);
+            else
+                TaskUI.transform.GetChild(idTask - 1).gameObject.SetActive(!TaskUI.transform.GetChild(idTask - 1).gameObject.activeSelf);
+
             CameraController.ToggleCursorMode();
         }
     }
 
     #region MESSAGES
+    // Toggle Task Screen and Interact button
     [MessageHandler((ushort)ServerToClientId.interact)]
     private static void Interact(Message message)
     {
@@ -49,7 +66,14 @@ public class Task : MonoBehaviour
         if (UIState)
             idTask = message.GetUShort();
         else
+        {
             Task.idTask = 0;
+            
+            // Disappear cursor and lock in screen
+            Cursor.visible = false;
+            if (Cursor.lockState == CursorLockMode.None)
+                Cursor.lockState = CursorLockMode.Locked;
+        }
     }
     #endregion
 
@@ -59,8 +83,12 @@ public class Task : MonoBehaviour
         Transform buttonSection = EventSystem.current.currentSelectedGameObject.transform.parent;
         
         Message message = Message.Create(MessageSendMode.reliable, ClientToServerId.electricButton);
-        
-        message.AddUShort(ushort.Parse(buttonSection.name.Substring(21)));
+
+        //string taskName = EventSystem.current.currentSelectedGameObject.transform.parent.parent.name;
+        //message.AddUShort(ushort.Parse(taskName.Substring(taskName.IndexOf('_')+1)));
+        message.AddUShort(idTask);
+
+        message.AddUShort(ushort.Parse(buttonSection.name.Substring(buttonSection.name.IndexOf('_') + 1)));
 
         if (buttonSection.GetChild(1).gameObject.GetComponent<Image>().sprite.name.Substring(0, 1) == "R")
             message.AddBool(true);
@@ -82,7 +110,7 @@ public class Task : MonoBehaviour
         {
             if (tableElectric[i])
             {
-                TaskUI.transform.GetChild(0).GetChild(i+1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteArray[4];
+                TaskUI.transform.GetChild(0).GetChild(i + 1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteArray[4];
                 TaskUI.transform.GetChild(0).GetChild(i + 1).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteArray[1];
             }
             else
@@ -138,9 +166,10 @@ public class Task : MonoBehaviour
     }
     #endregion
 
-    //Toggle Task Light in game and minimap
+    // Toggle Task Light in game and minimap
+    // If task is finished Set GameObject to false 
     [MessageHandler((ushort)ServerToClientId.taskList)]
-    private static void TaskList(Message message)
+    private static void TaskLight(Message message)
     {
         int taskCount = message.GetInt();
 
@@ -151,9 +180,9 @@ public class Task : MonoBehaviour
             if (task != null)
             {
                 if (statusTask)
-                    task.GetComponent<Light>().range = 0;
+                    task.transform.GetChild(0).gameObject.SetActive(false);
                 else
-                    task.GetComponent<Light>().range = 5;
+                    task.transform.GetChild(0).gameObject.SetActive(true);
             }
         }
     }

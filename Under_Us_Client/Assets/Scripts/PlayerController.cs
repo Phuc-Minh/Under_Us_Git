@@ -8,7 +8,10 @@ public class PlayerController : MonoBehaviour
     //Parametre général 
     [SerializeField] private static GameObject connectUI;
     [SerializeField] private Transform camTransform;
-    
+    private GameObject bigmapCam;
+    [SerializeField] private Transform minimapIcon;
+    //[SerializeField] private GameObject minimapCam;
+
 
     private bool[] inputs;
     public static bool inMeeting;
@@ -19,13 +22,22 @@ public class PlayerController : MonoBehaviour
         player = this.GetComponent<Player>();
         inputs = new bool[6];
         connectUI = GameObject.Find("GameplayScreen");
+        bigmapCam = GameObject.Find("BigMinimap");
     }
 
     private void Update()
     {
+        minimapIcon.rotation = Quaternion.Euler(0,90,0);
+        //minimapCam.transform.rotation = Quaternion.Euler(90, -90, 0);
+        //Toggle minimap
+        if (Input.GetKeyDown(KeyCode.M))
+            bigmapCam.transform.GetChild(0).gameObject.SetActive(true);
+        if (Input.GetKeyUp(KeyCode.M))
+            bigmapCam.transform.GetChild(0).gameObject.SetActive(false);
+
         //Player movement
         if (Input.GetKey(KeyCode.W))
-            inputs[0] = true;
+        inputs[0] = true;
 
         if (Input.GetKey(KeyCode.S))
             inputs[1] = true;

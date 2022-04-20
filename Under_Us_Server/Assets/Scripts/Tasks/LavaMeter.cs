@@ -12,7 +12,7 @@ public class LavaMeter : TaskGeneral
     private void Start()
     {
         SetId((ushort)TaskId.LavaMeter);
-        listTask.Add(GetId(), GetIsFinished());
+        listStatusTask.Add(GetId(), GetIsFinished());
 
         lavaTemp = Mathf.RoundToInt(Random.Range(-50f, 50f));
         meterTemp = Mathf.RoundToInt(Random.Range(lavaTemp-30,lavaTemp+30));
