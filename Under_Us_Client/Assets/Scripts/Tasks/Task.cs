@@ -19,6 +19,7 @@ public class Task : MonoBehaviour
         LavaMeter,
     }
 
+    private static Transform progressBarScreen;
     private static GameObject connectUI;
     private static GameObject TaskUI;
     public static ushort idTask;
@@ -31,6 +32,7 @@ public class Task : MonoBehaviour
         connectUI = GameObject.Find("GameplayScreen");
         TaskUI = GameObject.Find("TaskScreen");
         spriteArray = Resources.LoadAll<Sprite>("Electrical");
+        progressBarScreen = connectUI.transform.GetChild(6);
     }
 
     private void Update()
@@ -46,10 +48,13 @@ public class Task : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E) && idTask != 0)
         {
+            // Task 0 to 7 is the same screen (Electrical)
             if(idTask < 8)
                 TaskUI.transform.GetChild(0).gameObject.SetActive(!TaskUI.transform.GetChild(0).gameObject.activeSelf);
             else
-                TaskUI.transform.GetChild(idTask - 1).gameObject.SetActive(!TaskUI.transform.GetChild(idTask - 1).gameObject.activeSelf);
+            {
+                TaskUI.transform.GetChild(idTask - 7).gameObject.SetActive(!TaskUI.transform.GetChild(idTask - 7).gameObject.activeSelf);
+            }
 
             CameraController.ToggleCursorMode();
         }
@@ -173,16 +178,89 @@ public class Task : MonoBehaviour
     {
         int taskCount = message.GetInt();
 
+        // Edit progress bar 
+        GameObject ProgressBar = progressBarScreen.GetChild(2).gameObject;
+        ProgressBar.GetComponent<Image>().fillAmount = message.GetFloat();
+
+        // Edit task icon on minimap
+        int j = 0;
         for (int i = 0; i < taskCount; i++)
         {
-            GameObject task = GameObject.Find(message.GetString());
+            string taskName = message.GetString();
+            
+            GameObject task = GameObject.Find(taskName);
             bool statusTask = message.GetBool();
             if (task != null)
             {
                 if (statusTask)
+                {
+                    // If task is finished
                     task.transform.GetChild(0).gameObject.SetActive(false);
+                    progressBarScreen.GetChild(3).GetChild(j).gameObject.SetActive(true);
+                    progressBarScreen.GetChild(3).GetChild(j).gameObject.GetComponent<Text>().text = taskName;
+                    progressBarScreen.GetChild(3).GetChild(j).gameObject.GetComponent<Text>().color = Color.green;
+                }
                 else
+                {
+                    // If task is unfinished
                     task.transform.GetChild(0).gameObject.SetActive(true);
+                    progressBarScreen.GetChild(3).GetChild(j).gameObject.SetActive(true);
+                    progressBarScreen.GetChild(3).GetChild(j).gameObject.GetComponent<Text>().text = taskName;
+                    progressBarScreen.GetChild(3).GetChild(j).gameObject.GetComponent<Text>().color = Color.yellow;
+                }
+                j++;
+            }
+        }
+    }
+
+    [MessageHandler((ushort)ServerToClientId.sabotage)]
+    private static void Sabotage(Message message)
+    {
+        // Check if message is to start or end sabotage
+        if (message.GetBool())
+        {
+            // Check what kind of sabotage
+            // 0 Error
+            // 1 Light
+            // 2 Door
+            switch (message.GetUShort())
+            {
+                case 1:
+                    foreach (Player player in Player.list.Values)
+                    {
+                        if (player.IsLocal)
+                        {
+                            player.camTransform.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
+                            player.camTransform.GetComponent<Camera>().farClipPlane = 10f;
+                            break;
+                        }
+                    }
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
+            }
+        }
+        else
+        {
+            switch (message.GetUShort())
+            {
+                case 1:
+                    foreach (Player player in Player.list.Values)
+                    {
+                        if (player.IsLocal)
+                        {
+                            player.camTransform.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
+                            player.camTransform.GetComponent<Camera>().farClipPlane = 500f;
+                            break;
+                        }
+                    }
+                    break;
+                case 2:
+                    break;
+                default:
+                    break;
             }
         }
     }

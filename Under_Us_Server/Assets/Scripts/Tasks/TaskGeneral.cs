@@ -54,38 +54,49 @@ public class TaskGeneral : MonoBehaviour
         //Each time the list is updated check if all the task is finished
         bool[] newArrayTask = new bool[listStatusTask.Count];
         i = 0;
+        float finishedTask = 0;
         foreach (bool item in listStatusTask.Values)
         {
             newArrayTask[i] = item;
+            if (item)
+                finishedTask++;
+
             i++;
         }
 
         //If task is edited then send new task list to all player
-        if(oldArrayTask != newArrayTask)
-        {
-            Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.taskList);
-
-            message.AddInt(listStatusTask.Count);
-
-            foreach (TaskId key in listStatusTask.Keys)
-            {
-                message.AddString(key.ToString());
-                message.AddBool(listStatusTask[(ushort) key]);
-            }
-
-            NetworkManager.Singleton.Server.SendToAll(message);
-        }
-
+        if (oldArrayTask != newArrayTask)
+            SendNewTaskList(finishedTask / listStatusTask.Count);
 
         // TODO :: PUT IN A SEPARATE SCRIPT FOR WIN CONDITION
         if(!Array.Exists(newArrayTask, button => button == false))
             Debug.Log("All task is finished, comrade wins");
     }
 
+    public static void SendNewTaskList(float FinishedTaskPercentage)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.taskList);
+
+        //Add the total number of task
+        message.AddInt(listStatusTask.Count);
+        //Add the number of unfinished task
+        message.AddFloat(FinishedTaskPercentage);
+
+        foreach (TaskId key in listStatusTask.Keys)
+        {
+            message.AddString(key.ToString());
+            message.AddBool(listStatusTask[(ushort)key]);
+        }
+
+        NetworkManager.Singleton.Server.SendToAll(message);
+    }
+
     private void OnTriggerEnter(Collider collider)
     {
         //Verify if collider is a comrade or an impostor or a ghost
-        if (collider.gameObject.layer == 6 || collider.gameObject.layer == 7 || collider.gameObject.layer == 8)
+        if (collider.gameObject.layer == 6 
+            || collider.gameObject.layer == 7 
+            || collider.gameObject.layer == 8)
         {
             PlayerEnterTaskZone(collider.transform.GetComponent<Player>().Id);
         }else
@@ -97,7 +108,9 @@ public class TaskGeneral : MonoBehaviour
     private void OnTriggerExit(Collider collider)
     {
         //Verify if collider is a comrade or an impostor or a ghost
-        if (collider.gameObject.layer == 6 || collider.gameObject.layer == 7 || collider.gameObject.layer == 8)
+        if (collider.gameObject.layer == 6 
+            || collider.gameObject.layer == 7 
+            || collider.gameObject.layer == 8)
         {
             PlayerLeaveTaskZone(collider.transform.GetComponent<Player>().Id);
         }
@@ -119,6 +132,42 @@ public class TaskGeneral : MonoBehaviour
         message.AddBool(false);
 
         NetworkManager.Singleton.Server.Send(message, toClientId);
+    }
+
+    [MessageHandler((ushort)ClientToServerId.sabotageTask)]
+    private static void Input(ushort fromClientId, Message message)
+    {
+        // 0 Error
+        // 1 Light
+        // 2 Door
+        ushort sabotageType = 0;
+
+        ushort idSabotageTask = message.GetUShort();
+        
+        // Sabotage Electrical Task
+        if (idSabotageTask > 0 && idSabotageTask < 8)
+        {
+            sabotageType = 1;
+
+            if (listTask[idSabotageTask].TryGetComponent(out Electrical electrical))
+                electrical.isSabotaged = true;
+
+            for (int i = 0; i < 10; i++)
+            {
+                bool status = UnityEngine.Random.Range(0, 2) > 0.5f ? true : false;
+
+                // Only edit if status random is false
+                // Only turns button off
+                if(!status)
+                    Electrical.EditElectricalButton(idSabotageTask,i,status);
+            }
+        }
+
+        Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.sabotage);
+        messageToSend.AddBool(true);
+        messageToSend.AddUShort(sabotageType);
+
+        NetworkManager.Singleton.Server.SendToAll(messageToSend);
     }
     #endregion
 }

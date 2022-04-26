@@ -8,6 +8,7 @@ public class Electrical : TaskGeneral
 {
     private bool[] tableElectric = new bool[10];
     private bool needCheckTable;
+    public bool isSabotaged;
 
     private void Start()
     {
@@ -47,7 +48,21 @@ public class Electrical : TaskGeneral
         if (needCheckTable)
         {
             //Check id array electric contains a false value and update isFinished parameter
-            SetIsFinished(!Array.Exists(tableElectric, button => button == false));
+            bool allButtonOn = !Array.Exists(tableElectric, button => button == false);
+
+            SetIsFinished(allButtonOn);
+
+            //If task is sabotaged, turn the light back on for all player
+            if (isSabotaged && allButtonOn)
+            {
+                isSabotaged = false;
+
+                Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.sabotage);
+                messageToSend.AddBool(false);
+                messageToSend.AddUShort(1);
+
+                NetworkManager.Singleton.Server.SendToAll(messageToSend);
+            }
 
             needCheckTable = false;
         }
@@ -69,13 +84,17 @@ public class Electrical : TaskGeneral
 
         NetworkManager.Singleton.Server.Send(message, toClientId);
     }
+    public static void EditElectricalButton(ushort idTask, int idButton, bool status)
+    {
+        listTask[idTask].gameObject.GetComponent<Electrical>().tableElectric[idButton] = status;
+        listTask[idTask].gameObject.GetComponent<Electrical>().needCheckTable = true;
+    }
 
     [MessageHandler((ushort)ClientToServerId.electricButton)]
     private static void SwitchElectrical(ushort fromClientId, Message message)
     {
         ushort idTask = message.GetUShort();
 
-        listTask[idTask].gameObject.GetComponent<Electrical>().tableElectric[message.GetUShort()] = message.GetBool();
-        listTask[idTask].gameObject.GetComponent<Electrical>().needCheckTable = true;
+        EditElectricalButton(idTask, message.GetUShort(), message.GetBool());
     }
 }

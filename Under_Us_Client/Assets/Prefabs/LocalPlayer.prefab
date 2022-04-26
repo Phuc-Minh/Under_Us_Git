@@ -69,7 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camTransform: {fileID: 5587332264207218980}
   minimapIcon: {fileID: 1854126833611519609}
-  minimapCam: {fileID: 3543484484009916651}
+  progressBarScreen: {fileID: 0}
 --- !u!65 &2027270377378082013
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -361,7 +361,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
+  m_BackGroundColor: {r: 0.0754717, g: 0.0754717, b: 0.0754717, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0

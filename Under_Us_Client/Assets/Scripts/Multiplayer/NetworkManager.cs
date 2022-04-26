@@ -26,6 +26,8 @@ public enum ServerToClientId : ushort
     taskList,
     securityCamera,
     lavaButton,
+    progressBar,
+    sabotage,
 }
 
 public enum ClientToServerId : ushort
@@ -39,6 +41,7 @@ public enum ClientToServerId : ushort
     meetingChoice,
     electricButton,
     lavaButton,
+    sabotageTask,
     input,
 }
 
@@ -180,7 +183,7 @@ public class NetworkManager : MonoBehaviour
     {
         if (Mathf.Abs(ServerTick - serverTick) > tickDivergenceTolerance)
         {
-            Debug.Log($"Client tick: {ServerTick} -> {serverTick}");
+            //Debug.Log($"Client tick: {ServerTick} -> {serverTick}");
             ServerTick = serverTick;
         }
     }

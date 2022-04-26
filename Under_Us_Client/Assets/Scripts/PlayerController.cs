@@ -5,12 +5,14 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    //Parametre général 
+    // General 
     [SerializeField] private static GameObject connectUI;
     [SerializeField] private Transform camTransform;
-    private GameObject bigmapCam;
+    private GameObject bigmap;
     [SerializeField] private Transform minimapIcon;
-    //[SerializeField] private GameObject minimapCam;
+    [SerializeField] private GameObject progressBarScreen;
+
+    // [SerializeField] private GameObject minimapCam;
 
 
     private bool[] inputs;
@@ -22,18 +24,39 @@ public class PlayerController : MonoBehaviour
         player = this.GetComponent<Player>();
         inputs = new bool[6];
         connectUI = GameObject.Find("GameplayScreen");
-        bigmapCam = GameObject.Find("BigMinimap");
+        bigmap = GameObject.Find("BigMinimap");
+        progressBarScreen = connectUI.transform.GetChild(6).gameObject;
     }
 
     private void Update()
     {
         minimapIcon.rotation = Quaternion.Euler(0,90,0);
         //minimapCam.transform.rotation = Quaternion.Euler(90, -90, 0);
-        //Toggle minimap
-        if (Input.GetKeyDown(KeyCode.M))
-            bigmapCam.transform.GetChild(0).gameObject.SetActive(true);
-        if (Input.GetKeyUp(KeyCode.M))
-            bigmapCam.transform.GetChild(0).gameObject.SetActive(false);
+
+        // Toggle Map
+        if (Input.GetKeyDown(KeyCode.CapsLock))
+        {
+            bigmap.transform.GetChild(0).gameObject.SetActive(true);
+            if(Player.isImpostor())
+            {
+                for (int i = 0; i < bigmap.transform.GetChild(1).childCount; i++)
+                    bigmap.transform.GetChild(1).GetChild(i).gameObject.SetActive(true);
+            }
+            
+        }
+        if (Input.GetKeyUp(KeyCode.CapsLock))
+        {
+            bigmap.transform.GetChild(0).gameObject.SetActive(false);
+            if (Player.isImpostor())
+            {
+                for (int i = 0; i < bigmap.transform.GetChild(1).childCount; i++)
+                    bigmap.transform.GetChild(1).GetChild(i).gameObject.SetActive(false);
+            }
+        }
+
+        // Toggle Progress Bar
+        if (Input.GetKeyDown(KeyCode.Tab))
+            progressBarScreen.SetActive(!progressBarScreen.activeSelf);
 
         //Player movement
         if (Input.GetKey(KeyCode.W))
@@ -115,7 +138,7 @@ public class PlayerController : MonoBehaviour
         }
 
         //Kill other player
-        if (connectUI.transform.GetChild(3).gameObject.activeSelf && player.Role == 2)
+        if (connectUI.transform.GetChild(3).gameObject.activeSelf && Player.isImpostor())
         {
             if (Input.GetKeyDown(KeyCode.Q))
             {

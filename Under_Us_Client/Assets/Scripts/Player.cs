@@ -27,7 +27,7 @@ public class Player : MonoBehaviour
 
     //Animation + Movement
     [SerializeField] private PlayerAnimationManager animationManager;
-    [SerializeField] private Transform camTransform;
+    [SerializeField] public Transform camTransform;
     [SerializeField] private Interpolator interpolator;
 
     private string username;
@@ -75,6 +75,16 @@ public class Player : MonoBehaviour
         list.Add(id, player);
     }
 
+    public static bool isImpostor()
+    {
+        foreach (Player player in Player.list.Values)
+        {
+            if (player.IsLocal && player.Role == 2)
+                return true;
+        }
+
+        return false;
+    }
     #region Color
     private void ChangeColor(int color)
     {

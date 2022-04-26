@@ -16,7 +16,7 @@ public class UIGameplayManager : MonoBehaviour
 
     public static void CleanScreen()
     {
-        for (int i = 0; i < connectUI.transform.childCount; i++)
+        for (int i = 0; i < connectUI.transform.childCount-1; i++)
         {
             connectUI.transform.GetChild(i).gameObject.SetActive(false);
         }

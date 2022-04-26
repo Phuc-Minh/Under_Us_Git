@@ -14,6 +14,8 @@ public class UIGameMaster : MonoBehaviour
     {
         GameLogic.tablePlayerId.Clear();
 
+        TaskGeneral.SendNewTaskList(0);
+
         GameObject doors = GameObject.Find("Doors");
         if (doors != null)
         {
