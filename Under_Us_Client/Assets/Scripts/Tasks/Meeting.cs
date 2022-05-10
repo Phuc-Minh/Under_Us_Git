@@ -34,17 +34,11 @@ public class Meeting : MonoBehaviour
             {
                 // Can not self vote
                 if (Player.list[ushort.Parse(buttonName.Substring(13))].IsLocal)
-                {
-                    Debug.Log("Same Player");
                     return;
-                }
 
                 // Can not vote dead player
                 if (Player.list[ushort.Parse(buttonName.Substring(13))].Role == 3)
-                {
-                    Debug.Log("Dead Player");
                     return;
-                }
 
                 message.AddInt(int.Parse(buttonName.Substring(13)));
             }

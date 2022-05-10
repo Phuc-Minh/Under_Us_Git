@@ -195,7 +195,7 @@ public class Task : MonoBehaviour
                 if (statusTask)
                 {
                     // If task is finished
-                    task.transform.GetChild(0).gameObject.SetActive(false);
+                    task.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
                     progressBarScreen.GetChild(3).GetChild(j).gameObject.SetActive(true);
                     progressBarScreen.GetChild(3).GetChild(j).gameObject.GetComponent<Text>().text = taskName;
                     progressBarScreen.GetChild(3).GetChild(j).gameObject.GetComponent<Text>().color = Color.green;
@@ -203,7 +203,7 @@ public class Task : MonoBehaviour
                 else
                 {
                     // If task is unfinished
-                    task.transform.GetChild(0).gameObject.SetActive(true);
+                    task.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
                     progressBarScreen.GetChild(3).GetChild(j).gameObject.SetActive(true);
                     progressBarScreen.GetChild(3).GetChild(j).gameObject.GetComponent<Text>().text = taskName;
                     progressBarScreen.GetChild(3).GetChild(j).gameObject.GetComponent<Text>().color = Color.yellow;
@@ -216,7 +216,7 @@ public class Task : MonoBehaviour
     [MessageHandler((ushort)ServerToClientId.sabotage)]
     private static void Sabotage(Message message)
     {
-        // Check if message is to start or end sabotage
+        // Check if message is to start or end sabotage / True = Start
         if (message.GetBool())
         {
             // Check what kind of sabotage
@@ -231,10 +231,18 @@ public class Task : MonoBehaviour
                         if (player.IsLocal)
                         {
                             player.camTransform.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
-                            player.camTransform.GetComponent<Camera>().farClipPlane = 10f;
+                            player.camTransform.GetComponent<Animation>().Play("CameraLightOff");
                             break;
                         }
                     }
+
+                    GameObject task = GameObject.Find(message.GetString());
+                    if (task != null)
+                    {
+                        task.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                        task.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+                    }
+
                     break;
                 case 2:
                     break;
@@ -252,9 +260,16 @@ public class Task : MonoBehaviour
                         if (player.IsLocal)
                         {
                             player.camTransform.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
-                            player.camTransform.GetComponent<Camera>().farClipPlane = 500f;
+                            player.camTransform.GetComponent<Animation>().Play("CameraLightOn");
                             break;
                         }
+                    }
+
+                    GameObject task = GameObject.Find(message.GetString());
+                    if (task != null)
+                    {
+                        task.transform.GetChild(0).GetChild(0).gameObject.SetActive(false);
+                        task.transform.GetChild(0).GetChild(1).gameObject.SetActive(false);
                     }
                     break;
                 case 2:

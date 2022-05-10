@@ -28,6 +28,22 @@ public class TaskGeneral : MonoBehaviour
     {
         return id;
     }
+
+    public static string GetName(ushort idTask)
+    {
+        string taskName = "";
+        foreach (TaskId key in listTask.Keys)
+        {
+            if ((ushort)key == idTask)
+            {
+                taskName = key.ToString();
+                break;
+            }
+        }
+
+        return taskName;
+    }
+
     public bool GetIsFinished()
     {
         return isFinished;
@@ -166,6 +182,8 @@ public class TaskGeneral : MonoBehaviour
         Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.sabotage);
         messageToSend.AddBool(true);
         messageToSend.AddUShort(sabotageType);
+        if (sabotageType == 1 && listTask.ContainsKey(idSabotageTask))
+            messageToSend.AddString(TaskGeneral.GetName(idSabotageTask));
 
         NetworkManager.Singleton.Server.SendToAll(messageToSend);
     }

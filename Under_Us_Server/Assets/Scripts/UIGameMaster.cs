@@ -24,6 +24,11 @@ public class UIGameMaster : MonoBehaviour
 
         Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.startGame);
         NetworkManager.Singleton.Server.SendToAll(message);
+
+        foreach (ushort key in Player.list.Keys)
+            GameLogic.tablePlayerId.Add(key);
+
+        DistributeRole();
     }
 
     public void DistributeRole()
@@ -39,6 +44,7 @@ public class UIGameMaster : MonoBehaviour
             if (playerId == GameLogic.tablePlayerId[pickImpostor])
             {
                 // Distribute impostor
+                // Only one player can be impostor at the moment
                 message.AddUShort(2);
                 //Remove all Impostor object
                 foreach (Transform child in Player.list[playerId].transform)
@@ -59,6 +65,8 @@ public class UIGameMaster : MonoBehaviour
             }
             else
             {
+                // Distribute comrade
+
                 //Modify Role attribute in Player
                 Player.list[playerId].GetComponent<Player>().Role = 1;
                 
@@ -89,10 +97,6 @@ public class UIGameMaster : MonoBehaviour
             SetLayerRecursively(child.gameObject, newLayer);
         }
     }
-
-    #region Meeting
-
-    #endregion
 
     #region Message
     [MessageHandler((ushort)ClientToServerId.interative)]
@@ -151,7 +155,6 @@ public class UIGameMaster : MonoBehaviour
                     {
                         Debug.Log(e.Message);
                         Debug.Log(Collider.gameObject.name);
-
                     }
                 }
             }

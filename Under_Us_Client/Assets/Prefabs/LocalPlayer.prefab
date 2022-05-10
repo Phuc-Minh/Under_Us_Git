@@ -330,6 +330,7 @@ GameObject:
   - component: {fileID: 6428964339935729077}
   - component: {fileID: 6276706556283583429}
   - component: {fileID: 3647704339402097252}
+  - component: {fileID: 3681259192299317370}
   m_Layer: 6
   m_Name: Camera
   m_TagString: Untagged
@@ -417,6 +418,23 @@ MonoBehaviour:
   player: {fileID: 6827711664784451878}
   sensitivity: 100
   clampAngle: 85
+--- !u!111 &3681259192299317370
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7640979043680918583}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 7400000, guid: ff793a90d90479840b530432c6ad51a5, type: 2}
+  m_Animations:
+  - {fileID: 7400000, guid: ff793a90d90479840b530432c6ad51a5, type: 2}
+  - {fileID: 7400000, guid: f46761c19deafd94c8f5cdb3db69f38f, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &8188330376004582749
 GameObject:
   m_ObjectHideFlags: 0

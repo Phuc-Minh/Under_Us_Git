@@ -34,7 +34,6 @@ public enum ClientToServerId : ushort
 {
     name = 1,
     playerChangeColor,
-    playerSendId,
     impostorSendKillNotif,
     interative,
     playerInMeeting,
@@ -47,8 +46,6 @@ public enum ClientToServerId : ushort
 
 public class NetworkManager : MonoBehaviour
 {
-    public static Sprite[] SpriteArray;
-
     private static NetworkManager _singleton;
     public static NetworkManager Singleton
     {
@@ -153,37 +150,22 @@ public class NetworkManager : MonoBehaviour
     [MessageHandler((ushort)ServerToClientId.startGame)]
     private static void StartGame(Message message)
     {
-        // Send player id
+        /*// Send player id
         Message messageToSend = Message.Create(MessageSendMode.unreliable, ClientToServerId.playerSendId);
         messageToSend.AddUShort(Singleton.Client.Id);
-        NetworkManager.Singleton.Client.Send(messageToSend);
+        NetworkManager.Singleton.Client.Send(messageToSend);*/
 
         // Open doors
         GameObject doors = GameObject.Find("Doors");
         if (doors != null)
             doors.GetComponent<Animation>().Play();
-
-        // Set up meeting buttons
-        Transform MeetingScreen = GameObject.Find("GameplayScreen").transform.GetChild(4);
-        if (SpriteArray == null)
-            SpriteArray = Resources.LoadAll<Sprite>("MeetingCells");
-
-        int countPlayer = 0;
-        foreach (Player player in Player.list.Values)
-        {
-            MeetingScreen.GetChild(countPlayer).name = "PlayerSection" + player.Id;
-            MeetingScreen.GetChild(countPlayer).transform.GetChild(0).GetComponent<Image>().sprite = SpriteArray[player.GetComponent<Player>().oldColor];
-            MeetingScreen.GetChild(countPlayer).gameObject.SetActive(true);
-
-            countPlayer++;
-        }
     }
 
     private void SetTick(ushort serverTick)
     {
         if (Mathf.Abs(ServerTick - serverTick) > tickDivergenceTolerance)
         {
-            //Debug.Log($"Client tick: {ServerTick} -> {serverTick}");
+            Debug.Log($"Client tick: {ServerTick} -> {serverTick}");
             ServerTick = serverTick;
         }
     }

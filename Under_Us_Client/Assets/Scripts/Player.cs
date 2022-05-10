@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     //Color
     public static Texture[] textureArray;
     public static Texture[] textureBackpackArray;
+    public static Sprite[] SpriteArray;
     public int oldColor = 10;
 
     //General info
@@ -150,33 +151,40 @@ public class Player : MonoBehaviour
     {
         if (IsLocal)
         {
+            // Edit player stat
+            string roleText = "Role Distributed";
             Role = role;
             switch (Role)
             {
                 case 1:
-                    Debug.Log("Comrade");
+                    roleText = "You're a Comrade";
                     break;
                 case 2:
-                    Debug.Log("Impostor");
+                    roleText = "You're an Impostor";
                     break;
                 case 3:
-                    Debug.Log("Ghost");
+                    roleText = "You're now a Ghost";
                     break;
                 default:
                     break;
             }
-            // Annouce
-            GameObject annoucementText = GameObject.Find("GameplayScreen");
-            if (annoucementText != null)
+
+            // Role Distribute Stage
+            GameObject roleAnimation = GameObject.Find("RoleAnimation");
+            if (roleAnimation != null)
             {
+                // Edit Stage
+                roleAnimation.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
+                roleAnimation.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
 
-                if (role == 2)
-                    annoucementText.transform.GetChild(2).GetComponent<Text>().text = "You are an impostor";
-                else if (role == 1)
-                    annoucementText.transform.GetChild(2).GetComponent<Text>().text = "You are a comrade";
+                // Activate everything in Role Animation Object
+                roleAnimation.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = roleText;
+                roleAnimation.transform.GetChild(0).gameObject.SetActive(true);
+                roleAnimation.transform.GetChild(1).gameObject.SetActive(true);
+                roleAnimation.transform.GetChild(2).gameObject.SetActive(true);
+                roleAnimation.transform.GetChild(3).gameObject.SetActive(true);
 
-                annoucementText.transform.GetChild(2).gameObject.SetActive(true);
-                annoucementText.transform.GetChild(2).GetComponent<Animation>().Play("AppearRightNow");
+                Debug.Log("Role distributed");
             }
         }
     }
@@ -233,13 +241,32 @@ public class Player : MonoBehaviour
     private static void PlayerTeleport(Message message)
     {
         UIGameplayManager.CleanScreen();
+        GameObject connectUI = GameObject.Find("GameplayScreen");
 
         PlayerController.inMeeting = true;
         int meetingMode = message.GetInt();
         float meetingDuration = message.GetFloat();
 
+        //Set up meeting screen
+        Transform MeetingScreen = connectUI.transform.GetChild(4);
+        if (SpriteArray == null)
+            SpriteArray = Resources.LoadAll<Sprite>("MeetingCells");
+
+        int countPlayer = 0;
+        foreach (Player player in Player.list.Values)
+        {
+            MeetingScreen.GetChild(countPlayer).name = "PlayerSection" + player.Id;
+            MeetingScreen.GetChild(countPlayer).transform.GetChild(0).GetComponent<Image>().sprite = SpriteArray[player.GetComponent<Player>().oldColor];
+            MeetingScreen.GetChild(countPlayer).gameObject.SetActive(true);
+            MeetingScreen.GetChild(countPlayer).gameObject.SetActive(true);
+            MeetingScreen.GetChild(countPlayer).transform.GetChild(2).GetComponent<Text>().text = player.GetName();
+            if(player.Role == 3)
+                MeetingScreen.GetChild(countPlayer).transform.GetChild(3).gameObject.SetActive(true);
+            
+            countPlayer++;
+        }
+
         //Display meeting notification
-        GameObject connectUI = GameObject.Find("GameplayScreen");
         if (meetingMode == 0)
             connectUI.transform.GetChild(2).GetComponent<Text>().text = "Dead Player Reported";
         else
@@ -254,7 +281,6 @@ public class Player : MonoBehaviour
         connectUI.transform.GetChild(5).GetChild(0).GetComponent<Coldown>().StartTimer();
 
         //Reset Meeting
-        Transform MeetingScreen = connectUI.transform.GetChild(4);
         for (int i = 0; i <= 7; i++)
         {
             //Remove I voted and vote count

@@ -32,7 +32,6 @@ public enum ClientToServerId : ushort
 {
     name = 1,
     playerChangeColor,
-    playerSendId,
     impostorSendKillNotif,
     interative,
     playerInMeeting,

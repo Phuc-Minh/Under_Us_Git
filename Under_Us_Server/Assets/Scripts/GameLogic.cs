@@ -41,7 +41,7 @@ public class GameLogic : MonoBehaviour
     {
         Singleton = this;
     }
-
+    /*
     #region Message
     [MessageHandler((ushort)ClientToServerId.playerSendId)]
     private static void AddPlayerToList(ushort fromClientId, Message message)
@@ -51,5 +51,5 @@ public class GameLogic : MonoBehaviour
         if (!tablePlayerId.Contains(playerId))
             tablePlayerId.Add(playerId);
     }
-    #endregion
+    #endregion*/
 }

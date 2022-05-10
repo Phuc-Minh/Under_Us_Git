@@ -10,7 +10,7 @@ public class Sabotage : MonoBehaviour
     public void SabotageTask()
     {
         // Verify if local player is an impostor
-        if (Player.isImpostor())
+        if (Player.isImpostor() && !PlayerController.inMeeting)
         {
             Transform buttonName = EventSystem.current.currentSelectedGameObject.transform;
 

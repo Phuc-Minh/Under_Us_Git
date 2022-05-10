@@ -60,6 +60,7 @@ public class Electrical : TaskGeneral
                 Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.sabotage);
                 messageToSend.AddBool(false);
                 messageToSend.AddUShort(1);
+                messageToSend.AddString(GetName(GetId()));
 
                 NetworkManager.Singleton.Server.SendToAll(messageToSend);
             }

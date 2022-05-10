@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     private GameObject bigmap;
     [SerializeField] private Transform minimapIcon;
     [SerializeField] private GameObject progressBarScreen;
+    [SerializeField] private GameObject roleAnimation;
+
 
     // [SerializeField] private GameObject minimapCam;
 
@@ -26,6 +28,7 @@ public class PlayerController : MonoBehaviour
         connectUI = GameObject.Find("GameplayScreen");
         bigmap = GameObject.Find("BigMinimap");
         progressBarScreen = connectUI.transform.GetChild(6).gameObject;
+        roleAnimation = GameObject.Find("RoleAnimation");
     }
 
     private void Update()
@@ -123,13 +126,26 @@ public class PlayerController : MonoBehaviour
         }
 
         //Interac
-        if (!PlayerController.inMeeting)
+        if (!inMeeting)
         {
-            // If player is not in a meeting
-            // Send E keycode to server
-            if (Input.GetKeyDown(KeyCode.E) && connectUI.transform.GetChild(0).gameObject.activeSelf)
-                SendInteractive();
-
+            //Close role annoucement
+            if (roleAnimation.transform.GetChild(1).gameObject.activeSelf)
+            {
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    roleAnimation.transform.GetChild(0).gameObject.SetActive(false);
+                    roleAnimation.transform.GetChild(1).gameObject.SetActive(false);
+                    roleAnimation.transform.GetChild(2).gameObject.SetActive(false);
+                    roleAnimation.transform.GetChild(3).gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                // If player is not in a meeting
+                // Send E keycode to server
+                if (Input.GetKeyDown(KeyCode.E) && connectUI.transform.GetChild(0).gameObject.activeSelf)
+                    SendInteractive();
+            }
         } else if(Input.GetKeyDown(KeyCode.E)) {
             // If player is in a meeting 
             // Open meeting display
@@ -138,12 +154,10 @@ public class PlayerController : MonoBehaviour
         }
 
         //Kill other player
-        if (connectUI.transform.GetChild(3).gameObject.activeSelf && Player.isImpostor())
+        if (connectUI.transform.GetChild(3).gameObject.activeSelf && Player.isImpostor() && !inMeeting)
         {
             if (Input.GetKeyDown(KeyCode.Q))
-            {
                 SendKill();
-            }
         }
     }
 
