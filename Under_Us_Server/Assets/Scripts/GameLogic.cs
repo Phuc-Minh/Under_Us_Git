@@ -7,6 +7,8 @@ public class GameLogic : MonoBehaviour
 {
     //Attach network manager to gameObject and access that in code
     private static GameLogic _singleton;
+    public static bool gameInProcess;
+
 
     public static GameLogic Singleton
     {

@@ -85,8 +85,70 @@ public class TaskGeneral : MonoBehaviour
             SendNewTaskList(finishedTask / listStatusTask.Count);
 
         // TODO :: PUT IN A SEPARATE SCRIPT FOR WIN CONDITION
-        if(!Array.Exists(newArrayTask, button => button == false))
-            Debug.Log("All task is finished, comrade wins");
+        // TODO :: Also check when all impostor is dead
+
+        if (GameLogic.gameInProcess)
+        {
+            if (!Array.Exists(newArrayTask, button => button == false))
+            {
+                EndGame(1, "All task is finished, comrade wins");
+                GameLogic.gameInProcess = false;
+                return;
+            }
+
+            int ImpostorCount = 0;
+            int ComradeCount = 0;
+            foreach (Player player in Player.list.Values)
+            {
+                if (player.Role == 1 || player.Role == 3)
+                    ComradeCount++;
+                else if (player.Role == 2 || player.Role == 4)
+                    ImpostorCount++;
+            }
+            if(ImpostorCount >= ComradeCount)
+            {
+                EndGame(2, "Impostor wins");
+                GameLogic.gameInProcess = false;
+                return;
+            }
+        }
+        
+    }
+
+    public static void EndGame(int IDEndCode, string EndMessage)
+    {
+        Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.endGame);
+
+        if(IDEndCode == 1)
+        {
+            // ALL TASK FINISHED
+            int comradePlayer = 0;
+            message.AddString(EndMessage);
+            foreach (Player player in Player.list.Values)
+            {
+                if (player.Role == 1 || player.Role == 3)
+                    comradePlayer++;
+            }
+            message.AddInt(comradePlayer);
+            foreach (Player player in Player.list.Values)
+            {
+                if (player.Role == 1 || player.Role == 3)
+                    message.AddUShort(player.Id);
+            }
+        }
+        else if(IDEndCode == 2)
+        {
+            //Impostor have more or equal number as comrade
+            message.AddString(EndMessage);
+            message.AddInt(1);
+            foreach (Player player in Player.list.Values)
+            {
+                if (player.Role == 2 || player.Role == 4)
+                    message.AddUShort(player.Id);
+            }
+        }
+
+        NetworkManager.Singleton.Server.SendToAll(message);
     }
 
     public static void SendNewTaskList(float FinishedTaskPercentage)

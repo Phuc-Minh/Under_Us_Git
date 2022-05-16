@@ -92,7 +92,7 @@ public class Player : MonoBehaviour
         ChangePlayerColor(color, this.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Renderer>().materials);
     }
 
-    private static void ChangePlayerTexture(Material[] playerMaterials, int colorId)
+    public static void ChangePlayerTexture(Material[] playerMaterials, int colorId)
     {
         playerMaterials[1].SetTexture("_MainTex", textureArray[colorId]);
         playerMaterials[1].SetTexture("_EmissionMap", textureArray[colorId]);
@@ -176,6 +176,10 @@ public class Player : MonoBehaviour
                 // Edit Stage
                 roleAnimation.transform.GetChild(0).GetChild(1).gameObject.SetActive(true);
                 roleAnimation.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+
+                // Change player color in stage 
+                Material[] playerMaterials = roleAnimation.transform.GetChild(0).GetChild(1).GetChild(1).GetComponent<Renderer>().sharedMaterials;
+                ChangePlayerTexture(playerMaterials, this.oldColor);
 
                 // Activate everything in Role Animation Object
                 roleAnimation.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = roleText;

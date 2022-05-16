@@ -93,6 +93,7 @@ public class Impostor : MonoBehaviour
             Meeting.instantiateDeadPlayer(closestTarget.gameObject.GetComponent<Player>().Id);
 
             Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerDead);
+            messageToSend.AddBool(false);
             messageToSend.AddUShort(closestTarget.gameObject.GetComponent<Player>().Id);
 
             //Change the dead player role to Ghost

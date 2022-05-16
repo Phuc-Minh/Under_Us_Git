@@ -46,6 +46,7 @@ public class GameLogic : MonoBehaviour
     [MessageHandler((ushort)ServerToClientId.playerDead)]
     private static void DeadNotification(Message message)
     {
+        bool dieInMeeting = message.GetBool();
         ushort deadPlayerId = message.GetUShort();
         if (Player.list.ContainsKey(deadPlayerId))
         {
@@ -76,16 +77,19 @@ public class GameLogic : MonoBehaviour
                 SetLayerRecursively(Player.list[deadPlayerId].gameObject, 9);
             }
 
-            // Instantiate a dead corpse 
-            Singleton.deadPlayerPrefab.name = "Tombstone of player " + Player.list[deadPlayerId].Id;
-            Singleton.deadPlayerPrefab.transform.position = new Vector3(Player.list[deadPlayerId].gameObject.transform.position.x,
-                                                                        Player.list[deadPlayerId].gameObject.transform.position.y - 0.5f,
-                                                                        Player.list[deadPlayerId].gameObject.transform.position.z);
-            Singleton.deadPlayerPrefab.transform.rotation = Player.list[deadPlayerId].gameObject.transform.rotation;
-            Material[] playerMaterials = Singleton.deadPlayerPrefab.transform.GetComponent<Renderer>().sharedMaterials;
-            playerMaterials[0].SetTexture("_MainTex", Singleton.textureArray[Player.list[deadPlayerId].oldColor]);
+            if (!dieInMeeting)
+            {
+                // Instantiate a dead corpse 
+                Singleton.deadPlayerPrefab.name = "Tombstone of player " + Player.list[deadPlayerId].Id;
+                Singleton.deadPlayerPrefab.transform.position = new Vector3(Player.list[deadPlayerId].gameObject.transform.position.x,
+                                                                            Player.list[deadPlayerId].gameObject.transform.position.y - 0.5f,
+                                                                            Player.list[deadPlayerId].gameObject.transform.position.z);
+                Singleton.deadPlayerPrefab.transform.rotation = Player.list[deadPlayerId].gameObject.transform.rotation;
+                Material[] playerMaterials = Singleton.deadPlayerPrefab.transform.GetComponent<Renderer>().sharedMaterials;
+                playerMaterials[0].SetTexture("_MainTex", Singleton.textureArray[Player.list[deadPlayerId].oldColor]);
 
-            Instantiate(Singleton.deadPlayerPrefab);
+                Instantiate(Singleton.deadPlayerPrefab);
+            }
         }
     }
 
@@ -96,6 +100,42 @@ public class GameLogic : MonoBehaviour
         foreach (Transform child in gameObject.transform)
         {
             SetLayerRecursively(child.gameObject, newLayer);
+        }
+    }
+
+    [MessageHandler((ushort)ServerToClientId.endGame)]
+    private static void EndGame(Message message)
+    {
+        // Role Distribute Stage
+        GameObject roleAnimation = GameObject.Find("RoleAnimation");
+        if (roleAnimation != null)
+        {
+            string endMessage = message.GetString();
+
+            List<ushort> ListWinner = new List<ushort>();
+            int winnerCount = message.GetInt();
+            for (int i = 0; i < winnerCount; i++)
+                ListWinner.Add(message.GetUShort());
+
+            for (int i = 0; i < ListWinner.Count; i++)
+            {
+                // Edit Stage
+                roleAnimation.transform.GetChild(0).GetChild(i+1).gameObject.SetActive(true);
+
+                // Change player color in stage 
+                Material[] playerMaterials = roleAnimation.transform.GetChild(0).GetChild(i+1).GetChild(1).GetComponent<Renderer>().materials;
+                Player.ChangePlayerTexture(playerMaterials, Player.list[ListWinner[i]].oldColor);
+            }
+
+            // Activate everything in Role Animation Object
+            roleAnimation.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = endMessage;
+            roleAnimation.transform.GetChild(0).gameObject.SetActive(true);
+            roleAnimation.transform.GetChild(1).gameObject.SetActive(true);
+            roleAnimation.transform.GetChild(2).gameObject.SetActive(true);
+            roleAnimation.transform.GetChild(3).gameObject.SetActive(true);
+            roleAnimation.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
+
+            Debug.Log("Game Ended");
         }
     }
     #endregion

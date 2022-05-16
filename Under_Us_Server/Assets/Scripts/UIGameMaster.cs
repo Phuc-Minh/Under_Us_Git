@@ -29,6 +29,8 @@ public class UIGameMaster : MonoBehaviour
             GameLogic.tablePlayerId.Add(key);
 
         DistributeRole();
+
+        GameLogic.gameInProcess = true;
     }
 
     public void DistributeRole()

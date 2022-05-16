@@ -26,6 +26,7 @@ public enum ServerToClientId : ushort
     lavaButton,
     progressBar,
     sabotage,
+    endGame,
 }
 
 public enum ClientToServerId : ushort

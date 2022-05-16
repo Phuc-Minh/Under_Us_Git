@@ -172,10 +172,12 @@ public class Meeting : MonoBehaviour
 
                 // Send message notice rejected player is dead 
                 Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerDead);
+                // True if player die in meeting, no dead body is displayed
+                messageToSend.AddBool(true);
                 messageToSend.AddUShort(maxId);
 
                 // Instantiate dead player tombstone
-                instantiateDeadPlayer(maxId);
+                //instantiateDeadPlayer(maxId);
 
                 //Change the dead player role to Ghost
                 Player.list[maxId].Role = 3;
