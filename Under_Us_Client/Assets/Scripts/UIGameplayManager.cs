@@ -8,21 +8,68 @@ public class UIGameplayManager : MonoBehaviour
 {
     //Parametre général 
     private static GameObject connectUI;
-
+    public static GameObject announcementScreen;
+    public GameObject textObject;
+    public static string[] messageList = new string[10];
     private void Start()
     {
         connectUI = GameObject.Find("GameplayScreen");
+        announcementScreen = connectUI.transform.GetChild(7).gameObject;
     }
 
     public static void CleanScreen()
     {
-        for (int i = 0; i < connectUI.transform.childCount-1; i++)
+        for (int i = 0; i < connectUI.transform.childCount; i++)
         {
             connectUI.transform.GetChild(i).gameObject.SetActive(false);
         }
     } 
 
+    public static void AddMessageToAnnouncement(string message, bool forceToOpen)
+    {
+        message = $"<{message}>";
+        if(messageList[9] == null)
+        {
+            // Add message to list
+            for (int i = 0; i < messageList.Length; i++)
+            {
+                if (messageList[i] == null)
+                {
+                    messageList[i] = message;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            // Purge first message in list to add new message
+            for (int i = 1; i < messageList.Length; i++)
+                messageList[i - 1] = messageList[i];
+
+            messageList[9] = message;
+        }
+
+        // Update Announcement Screen
+        string messageToChange = "";
+        for (int i = 0; i < messageList.Length; i++)
+        {
+            if(messageList[i] != "")
+                messageToChange += $"{messageList[i]}\n";
+        }
+
+        announcementScreen.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Text>().text = messageToChange.Substring(0, messageToChange.Length - 1);
+
+        if(forceToOpen)
+            announcementScreen.SetActive(true);
+    }
+
     #region Message
+    [MessageHandler((ushort)ServerToClientId.message)]
+    private static void Message(Message message)
+    {
+        AddMessageToAnnouncement(message.GetString(),message.GetBool());
+    }
+
     [MessageHandler((ushort)ServerToClientId.meetingChoice)]
     private static void playerVoted(Message message)
     {
@@ -72,7 +119,6 @@ public class UIGameplayManager : MonoBehaviour
         GameObject deathAnimation = GameObject.Find("DeathAnimation");
 
         ushort maxPlayer = message.GetUShort();
-        string playerName = "";
 
         MeetingScreen.gameObject.SetActive(false);
         deathAnimation.transform.GetChild(1).gameObject.SetActive(true);
@@ -81,20 +127,24 @@ public class UIGameplayManager : MonoBehaviour
         {
             bool isImpostor = message.GetBool();
 
-            foreach (Player player in Player.list.Values)
-            {
-                if (player.Id == maxPlayer)
-                {
-                    playerName = player.GetName();
-                    ChangePlayerColor(player.oldColor, deathAnimation.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Renderer>().materials);
-                    break;
-                }
-            }
+            //ChangePlayerColor(Player.list[maxPlayer].oldColor, deathAnimation.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Renderer>().materials);
+            // OldColor + 1 because change color use player input which is 1 higher then indice inside color table
+            Player.ChangePlayerColor(Player.list[maxPlayer].oldColor+1, deathAnimation.transform.GetChild(0).GetChild(0).GetChild(0).GetChild(0).GetComponent<Renderer>().materials);
 
-            if(isImpostor)
-                connectUI.transform.GetChild(2).GetComponent<Text>().text = playerName + " was an impostor";
+            Debug.Log(Player.list[maxPlayer].GetName());
+            Debug.Log("Id : " + maxPlayer);
+            Debug.Log("Color : " + Player.list[maxPlayer].oldColor);
+
+            if (isImpostor)
+            {
+                connectUI.transform.GetChild(2).GetComponent<Text>().text = Player.list[maxPlayer].GetName() + " was an impostor";
+                AddMessageToAnnouncement(Player.list[maxPlayer].GetName() + " was an impostor", false);
+            }
             else
-                connectUI.transform.GetChild(2).GetComponent<Text>().text = playerName + " was not an impostor";
+            {
+                connectUI.transform.GetChild(2).GetComponent<Text>().text = Player.list[maxPlayer].GetName() + " was not an impostor";
+                AddMessageToAnnouncement(Player.list[maxPlayer].GetName() + " was not an impostor", false);
+            }
 
             deathAnimation.transform.GetChild(0).gameObject.SetActive(true);
 
@@ -103,6 +153,7 @@ public class UIGameplayManager : MonoBehaviour
         else
         {
             connectUI.transform.GetChild(2).GetComponent<Text>().text = "No one is ejected";
+            AddMessageToAnnouncement("No one is ejected", false);
         }
 
         connectUI.transform.GetChild(2).gameObject.SetActive(true);
@@ -139,10 +190,7 @@ public class UIGameplayManager : MonoBehaviour
         connectUI.transform.GetChild(5).gameObject.SetActive(false);
 
         //Display meeting end notification
-        connectUI.transform.GetChild(2).GetComponent<Text>().text = "Meeting ended";
-        connectUI.transform.GetChild(2).gameObject.SetActive(true);
-        connectUI.transform.GetChild(2).GetComponent<Animation>().Play("AppearRightNow");
-        connectUI.transform.GetChild(2).GetComponent<Animation>().wrapMode = WrapMode.Once;
+        UIGameplayManager.AddMessageToAnnouncement("Meeting Ended", true);
     }
     #endregion
 }

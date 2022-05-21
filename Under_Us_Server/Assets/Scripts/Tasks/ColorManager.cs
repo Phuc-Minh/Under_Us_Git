@@ -32,7 +32,7 @@ public class ColorManager : MonoBehaviour
     #region Messages
     private void PlayerEnterColor(ushort toClientId)
     {
-        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.taskZone);
+        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.colorZone);
         message.AddBool(true);
         message.AddBools(GameLogic.tableColor);
 
@@ -41,7 +41,7 @@ public class ColorManager : MonoBehaviour
 
     private void PlayerLeaveColor(ushort toClientId)
     {
-        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.taskZone);
+        Message message = Message.Create(MessageSendMode.unreliable, ServerToClientId.colorZone);
         message.AddBool(false);
 
         NetworkManager.Singleton.Server.Send(message, toClientId);

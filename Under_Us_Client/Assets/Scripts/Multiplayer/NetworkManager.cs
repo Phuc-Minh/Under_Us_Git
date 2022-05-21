@@ -8,7 +8,7 @@ public enum ServerToClientId : ushort
 {
     sync = 1,
     playerSpawned,
-    taskZone,
+    colorZone,
     startGame,
     playerChangeColor,
     playerInteracKillZone,
@@ -29,6 +29,7 @@ public enum ServerToClientId : ushort
     progressBar,
     sabotage,
     endGame,
+    message,
 }
 
 public enum ClientToServerId : ushort
@@ -90,6 +91,7 @@ public class NetworkManager : MonoBehaviour
     //[SerializeField] private ushort port;
     [Space(10)]
     [SerializeField] private ushort tickDivergenceTolerance = 1;
+    private GameObject roleAnimation;
 
     private void Awake()
     {
@@ -105,6 +107,8 @@ public class NetworkManager : MonoBehaviour
         Client.ConnectionFailed += FailedToConnect;
         Client.ClientDisconnected += PlayerLeft;
         Client.Disconnected += DidDisconnect;
+
+        roleAnimation = GameObject.Find("RoleAnimation");
 
         ServerTick = 2;
     }

@@ -6,6 +6,10 @@ using UnityEngine;
 
 public class Electrical : TaskGeneral
 {
+    public static bool sabotageOnColddown = false;
+    public static float sabotageColddown = 10f;
+    public static float sabotageTimeSpan;
+
     private bool[] tableElectric = new bool[10];
     private bool needCheckTable;
     public bool isSabotaged;
@@ -56,7 +60,7 @@ public class Electrical : TaskGeneral
             if (isSabotaged && allButtonOn)
             {
                 isSabotaged = false;
-
+                
                 Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.sabotage);
                 messageToSend.AddBool(false);
                 messageToSend.AddUShort(1);
@@ -66,6 +70,18 @@ public class Electrical : TaskGeneral
             }
 
             needCheckTable = false;
+        }
+
+        // Sabotage finish colddown
+        if (sabotageOnColddown && Time.time > sabotageTimeSpan)
+        {
+            sabotageOnColddown = false;
+
+            foreach (Player player in Player.list.Values)
+            {
+                if(player.Role == 2 || player.Role == 4)
+                    NetworkManager.AnnounceToClient(player.Id, "You can now sabotage", true);
+            }
         }
     }
 

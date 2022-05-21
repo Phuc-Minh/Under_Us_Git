@@ -2,6 +2,7 @@ using RiptideNetworking;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -57,9 +58,13 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Toggle Progress Bar
+        // Toggle Progress Screen
+        // Toggle Announcement Screen
         if (Input.GetKeyDown(KeyCode.Tab))
+        {
             progressBarScreen.SetActive(!progressBarScreen.activeSelf);
+            connectUI.transform.GetChild(7).gameObject.SetActive(progressBarScreen.activeSelf);
+        }
 
         //Player movement
         if (Input.GetKey(KeyCode.W))
@@ -197,7 +202,7 @@ public class PlayerController : MonoBehaviour
         NetworkManager.Singleton.Client.Send(message);
     }
 
-    [MessageHandler((ushort)ServerToClientId.taskZone)]
+    [MessageHandler((ushort)ServerToClientId.colorZone)]
     private static void ColorMenu(Message message)
     {
         bool UIState = message.GetBool();
@@ -207,9 +212,7 @@ public class PlayerController : MonoBehaviour
         {
             bool[] tableColor = message.GetBools();
             for (int i = 0; i < tableColor.Length; i++)
-            {
                 connectUI.transform.GetChild(1).GetChild(i).gameObject.SetActive(!tableColor[i]);
-            }
         }
     }
 

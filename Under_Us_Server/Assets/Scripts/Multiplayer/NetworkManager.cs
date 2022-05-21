@@ -6,7 +6,7 @@ public enum ServerToClientId : ushort
 {
     sync = 1,
     playerSpawned,
-    taskZone,
+    colorZone,
     startGame,
     playerChangeColor,
     playerInteracKillZone,
@@ -27,6 +27,7 @@ public enum ServerToClientId : ushort
     progressBar,
     sabotage,
     endGame,
+    message,
 }
 
 public enum ClientToServerId : ushort
@@ -120,5 +121,14 @@ public class NetworkManager : MonoBehaviour
         message.Add(CurrentTick);
 
         Server.SendToAll(message);
+    }
+
+    public static void AnnounceToClient(ushort id, string message, bool forceToOpen)
+    {
+        Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.message);
+        messageToSend.AddString(message);
+        messageToSend.AddBool(forceToOpen);
+
+        NetworkManager.Singleton.Server.Send(messageToSend, id);
     }
 }

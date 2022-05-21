@@ -62,6 +62,21 @@ public class Meeting : MonoBehaviour
 
         meetingInProgress = false;
         startColddown = false;
+
+        // Check Win condition
+        int ImpostorCount = 0;
+        int ComradeCount = 0;
+        foreach (Player player in Player.list.Values)
+        {
+            if (player.Role == 1)
+                ComradeCount++;
+            else if (player.Role == 2)
+                ImpostorCount++;
+        }
+        if (ImpostorCount >= ComradeCount)
+        {
+            WinCondition.ImpostorWins();
+        }
     }
 
     private void OnTriggerEnter(Collider collider)

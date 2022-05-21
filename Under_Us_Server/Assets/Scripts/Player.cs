@@ -10,7 +10,7 @@ public class Player : MonoBehaviour
     public string Username { get; private set; }
     /*============== ROLE =============
         1 = Comrade
-        2 = Impostor
+        !progressBarScreen.activeSelf = Impostor
         3 = Ghost
         4 = Ghost Impostor
     */

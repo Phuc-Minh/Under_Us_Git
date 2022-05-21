@@ -52,19 +52,21 @@ public class GameLogic : MonoBehaviour
         {
             if (Player.list[deadPlayerId].IsLocal)
             {
+                UIGameplayManager.CleanScreen();
                 GameObject connectUI = GameObject.Find("GameplayScreen");
 
-                //Modify Role attribute in Player
+                // Modify Role attribute in Player
                 Player.list[deadPlayerId].GetComponent<Player>().Role = 3;
-                //player.gameObject.GetComponentInChildren<Camera>().cullingMask |= 9;
+                // player.gameObject.GetComponentInChildren<Camera>().cullingMask |= 9;
+                // Player can now see ghost
                 Player.list[deadPlayerId].transform.GetChild(1).GetComponent<Camera>().cullingMask |= 1 << 9;
 
                 //Display dead notification
+                UIGameplayManager.AddMessageToAnnouncement("You are dead!", false);
                 connectUI.transform.GetChild(2).GetComponent<Text>().text = "You are dead!";
                 connectUI.transform.GetChild(2).gameObject.SetActive(true);
 
                 connectUI.transform.GetChild(2).GetComponent<Animation>().Play();
-                //connectUI.transform.GetChild(2).GetComponent<Animation>().wrapMode = WrapMode.Loop;
             }
             else
             {
@@ -129,13 +131,12 @@ public class GameLogic : MonoBehaviour
 
             // Activate everything in Role Animation Object
             roleAnimation.transform.GetChild(2).GetChild(0).GetComponent<Text>().text = endMessage;
+            roleAnimation.transform.GetChild(3).GetChild(0).GetComponent<Text>().text = "Close application and reset the server";
             roleAnimation.transform.GetChild(0).gameObject.SetActive(true);
             roleAnimation.transform.GetChild(1).gameObject.SetActive(true);
             roleAnimation.transform.GetChild(2).gameObject.SetActive(true);
             roleAnimation.transform.GetChild(3).gameObject.SetActive(true);
             roleAnimation.transform.GetChild(0).GetChild(0).gameObject.SetActive(true);
-
-            Debug.Log("Game Ended");
         }
     }
     #endregion

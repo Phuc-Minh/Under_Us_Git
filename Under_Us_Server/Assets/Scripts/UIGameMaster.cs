@@ -9,6 +9,7 @@ public class UIGameMaster : MonoBehaviour
 
     [Header("Prefabs")]
     [SerializeField] private GameObject impostorPrefab;
+    [SerializeField] public GameObject colorOrb;
 
     public void StartGame()
     {
@@ -31,6 +32,8 @@ public class UIGameMaster : MonoBehaviour
         DistributeRole();
 
         GameLogic.gameInProcess = true;
+
+        colorOrb.SetActive(false);
     }
 
     public void DistributeRole()
@@ -110,36 +113,57 @@ public class UIGameMaster : MonoBehaviour
             // Check if collider is an interable object
             if (Collider.gameObject.layer == 11)
             {
-                // Meeting Call
+                // Meeting Call or Report dead player
                 if (Collider.gameObject.name == "MeetingButton" || Collider.gameObject.name == "Tombstone(Clone)")
                 {
-                    GameObject meetingTable = GameObject.Find("MeetingSeat");
-                    if (meetingTable != null)
+                    bool lightIsOut = false;
+                    // Meeting can't be called when light is out
+                    for (int i = 1; i < 8; i++)
                     {
-                        int i = 0;
-                        PlayerMovement.enterMetting = true;
-
-                        Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerTeleport);
-
-                        if (Collider.gameObject.name == "Tombstone")
-                            messageToSend.AddInt(0);
-                        else
-                            messageToSend.AddInt(1);
-
-                        messageToSend.AddFloat(Meeting.GetMeetingDuration());
-                        foreach (Player player in Player.list.Values)
+                        if (TaskGeneral.listTask[(ushort)i].GetComponent<Electrical>().isSabotaged)
                         {
-                            player.transform.position = new Vector3(meetingTable.transform.GetChild(i).position.x, 1, meetingTable.transform.GetChild(i).position.z);
-
-                            messageToSend.AddUShort(player.Id);
-                            messageToSend.AddVector3(player.transform.position);
-
-                            i++;
+                            lightIsOut = true;
+                            break;
                         }
-
-                        NetworkManager.Singleton.Server.SendToAll(messageToSend);
                     }
-                    break;
+
+                    if (!lightIsOut)
+                    {
+                        GameObject meetingTable = GameObject.Find("MeetingSeat");
+                        if (meetingTable != null)
+                        {
+                            int i = 0;
+                            PlayerMovement.enterMetting = true;
+
+                            Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.playerTeleport);
+
+                            if (Collider.gameObject.name == "Tombstone")
+                            {
+                                messageToSend.AddInt(0);
+                                // Delete tombstone
+                            }
+                            else
+                                messageToSend.AddInt(1);
+
+                            messageToSend.AddFloat(Meeting.GetMeetingDuration());
+                            foreach (Player player in Player.list.Values)
+                            {
+                                player.transform.position = new Vector3(meetingTable.transform.GetChild(i).position.x, 1, meetingTable.transform.GetChild(i).position.z);
+
+                                messageToSend.AddUShort(player.Id);
+                                messageToSend.AddVector3(player.transform.position);
+
+                                i++;
+                            }
+
+                            NetworkManager.Singleton.Server.SendToAll(messageToSend);
+                        }
+                        break;
+                    }
+                    else
+                    {
+                        NetworkManager.AnnounceToClient(fromClientId, "Can't sabotage if light is out! Go fix it!", true);
+                    }
                 }
                 else
                 {

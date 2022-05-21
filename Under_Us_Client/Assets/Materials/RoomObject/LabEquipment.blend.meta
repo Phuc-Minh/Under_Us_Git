@@ -7,6 +7,16 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: 0 Liquid_
+    second: {fileID: 2100000, guid: 5458305f2f024414f86e4120c5ec8c4c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Blue Liquid
+    second: {fileID: 2100000, guid: 5458305f2f024414f86e4120c5ec8c4c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Dark Green
     second: {fileID: 2100000, guid: 4c5ab58f95906e740a6f805e12ad18c5, type: 2}
   - first:
@@ -14,6 +24,21 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: Glass
     second: {fileID: 2100000, guid: 0614574396981ef40a56d86c3dfbfa6f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Light Green
+    second: {fileID: 2100000, guid: 09b6b78df0d3bfb4f9b59d5d4536ff50, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Light Green.001
+    second: {fileID: 2100000, guid: 09b6b78df0d3bfb4f9b59d5d4536ff50, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: b12392d9ed7a6d94d8bf2fea55184606, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -42,8 +67,28 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Pink Liquid
+    second: {fileID: 2100000, guid: 399347551aabee3488104c629b1b6369, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Red Liquid
-    second: {fileID: 2100000, guid: b39b446d52a3cc74b84632475481b579, type: 2}
+    second: {fileID: 2100000, guid: c5d580337c4f9c74b9f5f0d21552eb7b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Red Liquid.001
+    second: {fileID: 2100000, guid: c5d580337c4f9c74b9f5f0d21552eb7b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Water
+    second: {fileID: 2100000, guid: d998b44cd7e43b64fa779fdce526a8cf, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Yellow Liquid
+    second: {fileID: 2100000, guid: 3c10f51ddbf070b4a87138ec78317165, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

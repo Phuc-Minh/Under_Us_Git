@@ -232,6 +232,7 @@ public class Task : MonoBehaviour
                         {
                             player.camTransform.GetComponent<Camera>().clearFlags = CameraClearFlags.SolidColor;
                             player.camTransform.GetComponent<Animation>().Play("CameraLightOff");
+                            UIGameplayManager.AddMessageToAnnouncement("Light is out! Open map and go fix it.", true);
                             break;
                         }
                     }
@@ -261,6 +262,7 @@ public class Task : MonoBehaviour
                         {
                             player.camTransform.GetComponent<Camera>().clearFlags = CameraClearFlags.Skybox;
                             player.camTransform.GetComponent<Animation>().Play("CameraLightOn");
+                            UIGameplayManager.AddMessageToAnnouncement("Light is back on!", false);
                             break;
                         }
                     }

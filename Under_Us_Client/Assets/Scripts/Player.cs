@@ -90,6 +90,10 @@ public class Player : MonoBehaviour
     private void ChangeColor(int color)
     {
         ChangePlayerColor(color, this.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<Renderer>().materials);
+        string colorName = "";
+        if (textureArray != null)
+            colorName = " to " + textureArray[color - 1].name.Substring(textureArray[color - 1].name.IndexOf('_') + 1);
+        UIGameplayManager.AddMessageToAnnouncement($"{this.GetName()} changed their color{colorName}",false);
     }
 
     public static void ChangePlayerTexture(Material[] playerMaterials, int colorId)
@@ -100,7 +104,7 @@ public class Player : MonoBehaviour
         playerMaterials[2].SetTexture("_EmissionMap", textureBackpackArray[colorId]);
     }
 
-    public void ChangePlayerColor(int colorCode, Material[] playerMaterials)
+    public static void ChangePlayerColor(int colorCode, Material[] playerMaterials)
     {
         if (textureArray == null)
         {
@@ -168,6 +172,7 @@ public class Player : MonoBehaviour
                 default:
                     break;
             }
+            UIGameplayManager.AddMessageToAnnouncement(roleText,false);
 
             // Role Distribute Stage
             GameObject roleAnimation = GameObject.Find("RoleAnimation");
@@ -187,8 +192,6 @@ public class Player : MonoBehaviour
                 roleAnimation.transform.GetChild(1).gameObject.SetActive(true);
                 roleAnimation.transform.GetChild(2).gameObject.SetActive(true);
                 roleAnimation.transform.GetChild(3).gameObject.SetActive(true);
-
-                Debug.Log("Role distributed");
             }
         }
     }
@@ -237,6 +240,8 @@ public class Player : MonoBehaviour
     [MessageHandler((ushort)ServerToClientId.playerRole)]
     private static void RetrieveRole(Message message)
     {
+        UIGameplayManager.CleanScreen();
+
         if (list.TryGetValue(message.GetUShort(), out Player player))
             player.SetRole(message.GetUShort());
     }
@@ -293,7 +298,6 @@ public class Player : MonoBehaviour
         }
         MeetingScreen.GetChild(8).gameObject.SetActive(true);
         MeetingScreen.GetComponent<Meeting>().ResetMeeting();
-
 
         foreach (Player player in Player.list.Values)
         {

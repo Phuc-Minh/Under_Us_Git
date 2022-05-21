@@ -91,64 +91,11 @@ public class TaskGeneral : MonoBehaviour
         {
             if (!Array.Exists(newArrayTask, button => button == false))
             {
-                EndGame(1, "All task is finished, comrade wins");
-                GameLogic.gameInProcess = false;
-                return;
-            }
-
-            int ImpostorCount = 0;
-            int ComradeCount = 0;
-            foreach (Player player in Player.list.Values)
-            {
-                if (player.Role == 1 || player.Role == 3)
-                    ComradeCount++;
-                else if (player.Role == 2 || player.Role == 4)
-                    ImpostorCount++;
-            }
-            if(ImpostorCount >= ComradeCount)
-            {
-                EndGame(2, "Impostor wins");
-                GameLogic.gameInProcess = false;
+                WinCondition.ComradeWins(true);
                 return;
             }
         }
         
-    }
-
-    public static void EndGame(int IDEndCode, string EndMessage)
-    {
-        Message message = Message.Create(MessageSendMode.reliable, ServerToClientId.endGame);
-
-        if(IDEndCode == 1)
-        {
-            // ALL TASK FINISHED
-            int comradePlayer = 0;
-            message.AddString(EndMessage);
-            foreach (Player player in Player.list.Values)
-            {
-                if (player.Role == 1 || player.Role == 3)
-                    comradePlayer++;
-            }
-            message.AddInt(comradePlayer);
-            foreach (Player player in Player.list.Values)
-            {
-                if (player.Role == 1 || player.Role == 3)
-                    message.AddUShort(player.Id);
-            }
-        }
-        else if(IDEndCode == 2)
-        {
-            //Impostor have more or equal number as comrade
-            message.AddString(EndMessage);
-            message.AddInt(1);
-            foreach (Player player in Player.list.Values)
-            {
-                if (player.Role == 2 || player.Role == 4)
-                    message.AddUShort(player.Id);
-            }
-        }
-
-        NetworkManager.Singleton.Server.SendToAll(message);
     }
 
     public static void SendNewTaskList(float FinishedTaskPercentage)
@@ -174,7 +121,7 @@ public class TaskGeneral : MonoBehaviour
         //Verify if collider is a comrade or an impostor or a ghost
         if (collider.gameObject.layer == 6 
             || collider.gameObject.layer == 7 
-            || collider.gameObject.layer == 8)
+            /*|| collider.gameObject.layer == 8*/)
         {
             PlayerEnterTaskZone(collider.transform.GetComponent<Player>().Id);
         }else
@@ -188,7 +135,7 @@ public class TaskGeneral : MonoBehaviour
         //Verify if collider is a comrade or an impostor or a ghost
         if (collider.gameObject.layer == 6 
             || collider.gameObject.layer == 7 
-            || collider.gameObject.layer == 8)
+            /*|| collider.gameObject.layer == 8*/)
         {
             PlayerLeaveTaskZone(collider.transform.GetComponent<Player>().Id);
         }
@@ -213,41 +160,58 @@ public class TaskGeneral : MonoBehaviour
     }
 
     [MessageHandler((ushort)ClientToServerId.sabotageTask)]
-    private static void Input(ushort fromClientId, Message message)
+    private static void Sabotage(ushort fromClientId, Message message)
     {
+
         // 0 Error
         // 1 Light
         // 2 Door
         ushort sabotageType = 0;
 
         ushort idSabotageTask = message.GetUShort();
-        
-        // Sabotage Electrical Task
-        if (idSabotageTask > 0 && idSabotageTask < 8)
+
+        if (!Electrical.sabotageOnColddown)
         {
-            sabotageType = 1;
-
-            if (listTask[idSabotageTask].TryGetComponent(out Electrical electrical))
-                electrical.isSabotaged = true;
-
-            for (int i = 0; i < 10; i++)
+            // Sabotage Electrical Task
+            // There are 8 electrical task that Impostor can sabotage so sabotageType will always be 1 for them
+            if (idSabotageTask > 0 && idSabotageTask < 8)
             {
-                bool status = UnityEngine.Random.Range(0, 2) > 0.5f ? true : false;
+                sabotageType = 1;
 
-                // Only edit if status random is false
-                // Only turns button off
-                if(!status)
-                    Electrical.EditElectricalButton(idSabotageTask,i,status);
+                if (listTask[idSabotageTask].TryGetComponent(out Electrical electrical))
+                    electrical.isSabotaged = true;
+
+                // Put sabotage on colddown
+                Electrical.sabotageTimeSpan = Time.time + Electrical.sabotageColddown;
+                Electrical.sabotageOnColddown = true;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    bool status = UnityEngine.Random.Range(0, 2) > 0.5f ? true : false;
+
+                    // Only edit if status random is false
+                    // Only turns button off
+                    if (!status)
+                        Electrical.EditElectricalButton(idSabotageTask, i, status);
+                }
             }
+
+            Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.sabotage);
+            // Sabotage On or Off
+            messageToSend.AddBool(true);
+            messageToSend.AddUShort(sabotageType);
+            // If sabotage is light, also add light name to distingue
+            if (sabotageType == 1 && listTask.ContainsKey(idSabotageTask))
+                messageToSend.AddString(TaskGeneral.GetName(idSabotageTask));
+
+            NetworkManager.Singleton.Server.SendToAll(messageToSend);
         }
-
-        Message messageToSend = Message.Create(MessageSendMode.reliable, ServerToClientId.sabotage);
-        messageToSend.AddBool(true);
-        messageToSend.AddUShort(sabotageType);
-        if (sabotageType == 1 && listTask.ContainsKey(idSabotageTask))
-            messageToSend.AddString(TaskGeneral.GetName(idSabotageTask));
-
-        NetworkManager.Singleton.Server.SendToAll(messageToSend);
+        else
+        {
+            // Notice impostor that they can't sabotage
+            NetworkManager.AnnounceToClient(fromClientId, $"You have to wait {Mathf.FloorToInt(Electrical.sabotageTimeSpan - Time.time)} sec to sabotage", true);
+        }
+        
     }
     #endregion
 }

@@ -25,7 +25,7 @@ public class Meeting : MonoBehaviour
                 // If the button is the same player as player
                 if (player.IsLocal && player.Role == 3)
                 {
-                    Debug.Log("Can not vote if you are dead");
+                    UIGameplayManager.AddMessageToAnnouncement("Can't vote if you are dead",true);
                     return;
                 }
             }
@@ -34,11 +34,17 @@ public class Meeting : MonoBehaviour
             {
                 // Can not self vote
                 if (Player.list[ushort.Parse(buttonName.Substring(13))].IsLocal)
+                {
+                    UIGameplayManager.AddMessageToAnnouncement("Can't vote for yourself", true);
                     return;
+                }
 
                 // Can not vote dead player
                 if (Player.list[ushort.Parse(buttonName.Substring(13))].Role == 3)
+                {
+                    UIGameplayManager.AddMessageToAnnouncement("Can't vote for dead player", true);
                     return;
+                }
 
                 message.AddInt(int.Parse(buttonName.Substring(13)));
             }
@@ -52,7 +58,7 @@ public class Meeting : MonoBehaviour
         } 
         else
         {
-            Debug.Log("Already voted");
+            UIGameplayManager.AddMessageToAnnouncement("You already voted", true);
         }
     }
 
