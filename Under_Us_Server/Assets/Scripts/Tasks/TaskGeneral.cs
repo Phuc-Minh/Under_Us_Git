@@ -19,6 +19,7 @@ public class TaskGeneral : MonoBehaviour
         ElectricalLabo2,
         ElectricalLabo3,
         LavaMeter,
+        StepOrder,
     }
 
     private ushort id;

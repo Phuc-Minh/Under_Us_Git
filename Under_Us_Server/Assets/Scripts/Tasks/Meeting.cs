@@ -73,6 +73,7 @@ public class Meeting : MonoBehaviour
             else if (player.Role == 2)
                 ImpostorCount++;
         }
+
         if (ImpostorCount >= ComradeCount)
         {
             WinCondition.ImpostorWins();

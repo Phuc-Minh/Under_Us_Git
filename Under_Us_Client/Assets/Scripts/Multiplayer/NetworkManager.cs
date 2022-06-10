@@ -26,6 +26,8 @@ public enum ServerToClientId : ushort
     taskList,
     securityCamera,
     lavaButton,
+    stepButton,
+    stepButtonInformation,
     progressBar,
     sabotage,
     endGame,
@@ -43,6 +45,7 @@ public enum ClientToServerId : ushort
     electricButton,
     lavaButton,
     sabotageTask,
+    stepButton,
     input,
 }
 
