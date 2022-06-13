@@ -18,8 +18,10 @@ public class TaskGeneral : MonoBehaviour
         ElectricalLabo1,
         ElectricalLabo2,
         ElectricalLabo3,
-        LavaMeter,
         StepOrder,
+        StepOrderMeeting,
+        StepOrderSpeciment,
+        LavaMeter,
     }
 
     private ushort id;
@@ -158,6 +160,18 @@ public class TaskGeneral : MonoBehaviour
         message.AddBool(false);
 
         NetworkManager.Singleton.Server.Send(message, toClientId);
+
+        if(GetId() == (ushort)TaskId.StepOrder || GetId() == (ushort)TaskId.StepOrderMeeting || GetId() == (ushort)TaskId.StepOrderSpeciment)
+        {
+            // If leaving player is playing player
+            // Reset task
+            if(toClientId == this.GetComponent<StepOrder>().player)
+            {
+                this.GetComponent<StepOrder>().turn = 0;
+                this.GetComponent<StepOrder>().player = 0;
+                this.GetComponent<StepOrder>().serverTurn = true;
+            }
+        }
     }
 
     [MessageHandler((ushort)ClientToServerId.sabotageTask)]

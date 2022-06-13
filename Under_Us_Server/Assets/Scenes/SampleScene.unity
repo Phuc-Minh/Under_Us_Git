@@ -1242,6 +1242,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 852753569}
+    - target: {fileID: 7891773929393608327, guid: fcd69bf261aac614497b272417e36320, type: 3}
+      propertyPath: m_Name
+      value: StepMachineSpeciment
+      objectReference: {fileID: 0}
     - target: {fileID: 7994458693012900783, guid: fcd69bf261aac614497b272417e36320, type: 3}
       propertyPath: m_Mesh
       value: 

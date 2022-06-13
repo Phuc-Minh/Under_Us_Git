@@ -114,8 +114,6 @@ public class NetworkManager : MonoBehaviour
             player.GetComponent<PlayerMovement>().ResetMoveSpeed();
             Destroy(player.gameObject);
         }
-
-
     }
 
     private void SendSync()

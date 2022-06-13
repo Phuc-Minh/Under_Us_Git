@@ -16,9 +16,16 @@ public class Task : MonoBehaviour
         ElectricalLabo1,
         ElectricalLabo2,
         ElectricalLabo3,
-        LavaMeter,
         StepOrder,
+        StepOrderMeeting,
+        StepOrderSpeciment,
+        LavaMeter,
     }
+
+    private const int electricalOrder = 0;
+    private const int stepOrder = 1;
+    private const int lavaOrder = 2;
+
 
     private static Transform progressBarScreen;
     private static GameObject connectUI;
@@ -56,12 +63,12 @@ public class Task : MonoBehaviour
         {
             // Task 0 to 7 is the same screen (Electrical)
             if(idTask < 8)
-                TaskUI.transform.GetChild(0).gameObject.SetActive(!TaskUI.transform.GetChild(0).gameObject.activeSelf);
+                TaskUI.transform.GetChild(electricalOrder).gameObject.SetActive(!TaskUI.transform.GetChild(electricalOrder).gameObject.activeSelf);
+            else if(idTask < 11)
+                TaskUI.transform.GetChild(stepOrder).gameObject.SetActive(!TaskUI.transform.GetChild(stepOrder).gameObject.activeSelf);
             else
-            {
-                TaskUI.transform.GetChild(idTask - 7).gameObject.SetActive(!TaskUI.transform.GetChild(idTask - 7).gameObject.activeSelf);
-            }
-
+                TaskUI.transform.GetChild(lavaOrder).gameObject.SetActive(!TaskUI.transform.GetChild(lavaOrder).gameObject.activeSelf);
+            
             CameraController.ToggleCursorMode();
         }
     }
@@ -120,13 +127,13 @@ public class Task : MonoBehaviour
         {
             if (tableElectric[i])
             {
-                TaskUI.transform.GetChild(0).GetChild(i + 1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteElectrical[4];
-                TaskUI.transform.GetChild(0).GetChild(i + 1).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteElectrical[1];
+                TaskUI.transform.GetChild(electricalOrder).GetChild(i + 1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteElectrical[4];
+                TaskUI.transform.GetChild(electricalOrder).GetChild(i + 1).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteElectrical[1];
             }
             else
             {
-                TaskUI.transform.GetChild(0).GetChild(i + 1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteElectrical[3];
-                TaskUI.transform.GetChild(0).GetChild(i + 1).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteElectrical[2];
+                TaskUI.transform.GetChild(electricalOrder).GetChild(i + 1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteElectrical[3];
+                TaskUI.transform.GetChild(electricalOrder).GetChild(i + 1).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteElectrical[2];
             }
         }
     }
@@ -157,20 +164,20 @@ public class Task : MonoBehaviour
         int lavaTemp = message.GetInt();
         int lavaMeter = message.GetInt();
 
-        TaskUI.transform.GetChild(1).GetChild(0).GetChild(0).GetComponent<Text>().text = lavaMeter.ToString();
-        TaskUI.transform.GetChild(1).GetChild(1).GetChild(0).GetComponent<Text>().text = lavaTemp.ToString();
+        TaskUI.transform.GetChild(lavaOrder).GetChild(0).GetChild(0).GetComponent<Text>().text = lavaMeter.ToString();
+        TaskUI.transform.GetChild(lavaOrder).GetChild(1).GetChild(0).GetComponent<Text>().text = lavaTemp.ToString();
 
         if(lavaTemp == lavaMeter)
         {
-            TaskUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteLava[4];
-            TaskUI.transform.GetChild(1).GetChild(0).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteLava[0];
-            TaskUI.transform.GetChild(1).GetChild(0).GetChild(2).gameObject.GetComponent<Image>().sprite = spriteLava[2];
+            TaskUI.transform.GetChild(lavaOrder).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteLava[4];
+            TaskUI.transform.GetChild(lavaOrder).GetChild(0).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteLava[0];
+            TaskUI.transform.GetChild(lavaOrder).GetChild(0).GetChild(2).gameObject.GetComponent<Image>().sprite = spriteLava[2];
         }
         else
         {
-            TaskUI.transform.GetChild(1).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteLava[5];
-            TaskUI.transform.GetChild(1).GetChild(0).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteLava[1];
-            TaskUI.transform.GetChild(1).GetChild(0).GetChild(2).gameObject.GetComponent<Image>().sprite = spriteLava[3];
+            TaskUI.transform.GetChild(lavaOrder).GetChild(0).gameObject.GetComponent<Image>().sprite = spriteLava[5];
+            TaskUI.transform.GetChild(lavaOrder).GetChild(0).GetChild(1).gameObject.GetComponent<Image>().sprite = spriteLava[1];
+            TaskUI.transform.GetChild(lavaOrder).GetChild(0).GetChild(2).gameObject.GetComponent<Image>().sprite = spriteLava[3];
         }
     }
     #endregion
@@ -180,16 +187,16 @@ public class Task : MonoBehaviour
     private static void DisplayStepTask(Message message)
     {
         TaskUI = GameObject.Find("TaskScreen");
-        TaskUI.transform.GetChild(2).GetChild(8).gameObject.GetComponent<Text>().text = $"Turn {message.GetInt()}";
+        TaskUI.transform.GetChild(stepOrder).GetChild(8).gameObject.GetComponent<Text>().text = $"Turn {message.GetInt()}";
         int step = message.GetInt();
 
         //Reset all button color
         for (int i = 1; i < 7; i++)
         {
-            if (TaskUI.transform.GetChild(2).GetChild(i).GetChild(0).GetComponent<Image>().sprite.name != "Square")
-                TaskUI.transform.GetChild(2).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[0];
+            if (TaskUI.transform.GetChild(stepOrder).GetChild(i).GetChild(0).GetComponent<Image>().sprite.name != "Square")
+                TaskUI.transform.GetChild(stepOrder).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[0];
         }
-        TaskUI.transform.GetChild(2).GetChild(step).GetChild(0).GetComponent<Image>().sprite = spriteStep[1];
+        TaskUI.transform.GetChild(stepOrder).GetChild(step).GetChild(0).GetComponent<Image>().sprite = spriteStep[1];
     }
 
     [MessageHandler((ushort)ServerToClientId.stepButtonInformation)]
@@ -197,19 +204,19 @@ public class Task : MonoBehaviour
     {
         TaskUI = GameObject.Find("TaskScreen");
         
-        TaskUI.transform.GetChild(2).GetChild(8).gameObject.GetComponent<Text>().text = $"Turn {message.GetInt()}";
+        TaskUI.transform.GetChild(stepOrder).GetChild(8).gameObject.GetComponent<Text>().text = $"Turn {message.GetInt()}";
         string instruction = message.GetString();
-        TaskUI.transform.GetChild(2).GetChild(9).gameObject.GetComponent<Text>().text = instruction.Substring(1);
+        TaskUI.transform.GetChild(stepOrder).GetChild(9).gameObject.GetComponent<Text>().text = instruction.Substring(1);
 
         //Reset all button color
         for (int i = 1; i < 7; i++)
         {
             if (instruction.Substring(0,1) == "1")
-                TaskUI.transform.GetChild(2).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[2];
+                TaskUI.transform.GetChild(stepOrder).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[2];
             else if(instruction.Substring(0, 1) == "2")
-                TaskUI.transform.GetChild(2).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[3];
+                TaskUI.transform.GetChild(stepOrder).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[3];
             else
-                TaskUI.transform.GetChild(2).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[0];
+                TaskUI.transform.GetChild(stepOrder).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[0];
         }
     }
 
@@ -220,8 +227,8 @@ public class Task : MonoBehaviour
         //Reset all button color
         for (int i = 1; i < 7; i++)
         {
-            if (TaskUI.transform.GetChild(2).GetChild(i).GetChild(0).GetComponent<Image>().sprite.name != "Square")
-                TaskUI.transform.GetChild(2).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[0];
+            if (TaskUI.transform.GetChild(stepOrder).GetChild(i).GetChild(0).GetComponent<Image>().sprite.name != "Square")
+                TaskUI.transform.GetChild(stepOrder).GetChild(i).GetChild(0).GetComponent<Image>().sprite = spriteStep[0];
         }
         buttonSection.GetChild(0).GetComponent<Image>().sprite = spriteStep[1];
 

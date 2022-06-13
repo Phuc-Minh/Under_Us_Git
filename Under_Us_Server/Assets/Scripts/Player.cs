@@ -37,6 +37,10 @@ public class Player : MonoBehaviour
 
         player.SendSpawned();
         list.Add(id, player);
+
+        if (username == "")
+            username = "Someone";
+        NetworkManager.AnnounceToClient(id, $"{username} just joined, say hi and pick your color!", true);
     }
 
     #region Messages

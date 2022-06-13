@@ -61,6 +61,9 @@ public class Player : MonoBehaviour
         {
             player = Instantiate(GameLogic.Singleton.LocalPlayerPrefab, position, Quaternion.identity).GetComponent<Player>();
             player.IsLocal = true;
+
+            GameObject soundManager = GameObject.Find("SoundManager");
+            soundManager.transform.GetChild(0).gameObject.SetActive(true);
         }
         else
         {

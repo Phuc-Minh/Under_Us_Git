@@ -8,14 +8,28 @@ public class StepOrder : TaskGeneral
 {
     private int[] stepTable = new int[] { 1, 2, 3, 4, 5, 6 };
     private int[] stepTablePlayerVersion = new int[] { 0, 0, 0, 0, 0, 0};
-    private int turn = 0;
-    private ushort player = 0;
+    public int turn = 0;
+    public ushort player = 0;
 
     public bool serverTurn = true;
 
     private void Start()
     {
-        SetId((ushort)TaskId.StepOrder);
+        switch (gameObject.name)
+        {
+            case "StepMachine":
+                SetId((ushort)TaskId.StepOrder);
+                break;
+            case "StepMachineMeeting":
+                SetId((ushort)TaskId.StepOrderMeeting);
+                break;
+            case "StepMachineSpeciment":
+                SetId((ushort)TaskId.StepOrderSpeciment);
+                break;
+            default:
+                break;
+        }
+
         listStatusTask.Add(GetId(), GetIsFinished());
         listTask.Add(GetId(), this);
     }
@@ -31,38 +45,68 @@ public class StepOrder : TaskGeneral
     }
     IEnumerator PlayStepOrder()
     {
-        /*============================ Turn 1 ==================================*/
-        /*======================================================================*/
-        // Server turn : Instruction  phase
-        turn = 1;
-        serverTurn = true;
-        ShuffleArrayAndCleanAnswer();
-        SendStepInstruction(player, turn, "0Repeat message to save it");
-        yield return new WaitForSeconds(2);
-        SendStepMessage(player, turn, stepTable[turn - 1]);
-        yield return new WaitForSeconds(1);
-        serverTurn = false;
-
-        // Player turn
-        SendStepInstruction(player, turn, "0Your turn, you have 2 seconds");
-        yield return new WaitForSeconds(2);
-
-        // Server turn : Verification phase
-        if (stepTable[0] == stepTablePlayerVersion[0]) {
-            // Good step
-            SendStepInstruction(player, turn, "1Message saved!");
+        bool PlayerError = false;
+        turn = 4;
+        while (!PlayerError && turn < stepTable.Length)
+        {
+            /*============================ Turn 1 ==================================*/
+            /*======================================================================*/
+            // Server turn : Instruction  phase
+            turn++;
+            ShuffleArrayAndCleanAnswer();
+            //Debug.Log($"Step Table : [{stepTable[0]},{stepTable[1]},{stepTable[2]},{stepTable[3]},{stepTable[4]},{stepTable[5]}]");
+            SendStepInstruction(player, turn, "0Repeat message to save it");
             yield return new WaitForSeconds(2);
-        }
-        else {
-            // Bad step
-            SendStepInstruction(player, turn, "2Message failed to save! Press reset to try again.");
-            yield return new WaitForSeconds(2);
+            for (int i = 0; i < turn; i++)
+            {
+                SendStepMessage(player, turn, stepTable[i]);
+                yield return new WaitForSeconds(1);
+            }
+
+            serverTurn = false;
+            // Player turn
+            SendStepInstruction(player, turn, "0Your turn, you have 3 seconds");
+            yield return new WaitForSeconds(3);
+            serverTurn = true;
+
+            // Server turn : Verification phase
+            int counter = 0;
+            while (!PlayerError && counter < turn)
+            {
+                if (stepTable[counter] != stepTablePlayerVersion[counter])
+                {
+                    PlayerError = true;
+                }
+
+                counter++;
+            }
+
+            if (!PlayerError)
+            {
+                // Good step
+                SendStepInstruction(player, turn, "1Message saved!");
+                yield return new WaitForSeconds(2);
+            }
+            else
+            {
+                // Bad step
+                SendStepInstruction(player, turn, "2Message failed to save! Press reset to try again.");
+                turn = 0;
+                player = 0;
+                yield return new WaitForSeconds(2);
+            }
         }
 
-        //FORCE END
-        turn = 0;
-        player = 0;
-        ShuffleArrayAndCleanAnswer();
+        if (!PlayerError && turn == stepTable.Length)
+        {
+            // Task finish
+            SendStepInstruction(player, turn, "1Task finished! Respect+");
+            yield return new WaitForSeconds(3);
+            SendStepInstruction(player, turn, "0 ");
+            turn = 0;
+            player = 0;
+            SetIsFinished(true);
+        }
     }
 
     private void ShuffleArrayAndCleanAnswer()
@@ -88,12 +132,23 @@ public class StepOrder : TaskGeneral
         // TODO : RESET IF PLAYING PLAYER GET OUT OF TASK ZONE
         StepOrder StepTask = TaskGeneral.listTask[message.GetUShort()].GetComponent<StepOrder>();
 
+        // If task is already finished
+        if (StepTask.GetIsFinished())
+        {
+            SendStepInstruction(fromClientId, StepTask.turn, "1Task already finished!");
+            return;
+        }
+
         // If sending player is not the one who is playing
         if (StepTask.player != 0 && fromClientId != StepTask.player)
+        {
+            SendStepInstruction(fromClientId, StepTask.turn, "2Someone is already receiving message!");
             return;
-        // Only start or reset instruction is allowed to be played during server turn
+        }
+
+        // No one can play during server turn
         bool StartStepTask = message.GetBool();
-        if (!StartStepTask && StepTask.serverTurn)
+        if (StepTask.player != 0 && StepTask.serverTurn)
             return;
 
         // Start or reset step task 
